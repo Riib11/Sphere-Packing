@@ -1,0 +1,68 @@
+\documentclass{article}
+
+\usepackage[paper=a4paper, verbose, centering, margin=1.3in]{geometry}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{centernot}
+\usepackage{graphicx}
+\usepackage{amsthm}
+\usepackage{mathtools}
+
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\R}{\mathbb{R}}
+
+\renewcommand{\i}{^{-1}}
+\newcommand{\set}[1]{\left\{ #1 \right\}}
+
+\newcommand{\Leech}{\Lambda_{24}}
+
+\newcommand{\header}[1]{\noindent\textsc{#1.} }
+
+\begin{document}
+
+
+\section*{1.4. $n$-Dimensional Packings}
+
+\header{Definition}
+The \textbf{fcc} lattice is the face-centered cubic lattice.
+
+\header{Definition}
+A lattice $\Lambda$ has a \textbf{dual} lattice $\Lambda^*$ given by
+$$ \Lambda^* := \set{ x : \forall u \in \Lambda, x \cdot u \in \Z }. $$
+For example, the dual of the fcc lattice is the \textbf{body-centered cubic} lattice (bcc lattice).
+If $A$ is a Gram matrix for $\Lambda$, then $\Lambda^*$ has Gram matrix $A\i$.
+
+Why is is finding dense packings in $n$-dimensions interesting?
+\begin{enumerate}
+  \item
+  Interesting problem in pure geometry.
+  Hilbert mentioned it in 1900 in his ist of open problems [Hil1], [Mil5].
+
+  \item
+  Has (sometimes unexpected) connections to other branches of mathematics.
+  For example, the densest lattice packings in up to 8 dimensions belong to the families $A_n, D_n, E_n$ and the corresponding Coxeter-Dynkin diagrams turn in several seemingly unrelated areas.
+
+  \item
+  The Leech lattice in 24 dimensions, $\Leech$, has mysterious connections with hyperbolic geometry, Lie algebras, and the Monster simple group.
+
+  \item
+  There are direct applications of lattice packings to number theory e.g. solving Diophantic equations and the ``geometry of numbers.'' [Cas2], [Gru1], [Gru1a], [Han3], [Hla1], [Hla3], [Kel1], [Min4], [Min6].
+  (See Section 2.3.)
+
+  \item
+  There are practical applications of sphere packings to digital communications (see Chapter 3).
+
+  \item
+  2- and 3-dimensional spheres have many practical applications in general e.g. positioning optical fibers in the cross-section of a cable [Kin1], chemistry, physics, antenna design, X-ray tomography, and statistical analysis (on spheres).
+
+  \item
+  $n$-dimensional packings may be used in the numerical evaluation of integrals, either on the surface of a sphere in $\R^n$ or its interior. (See Section 3.2.)
+
+  \item
+  Dual theory and superstring theory in physics have made use of $E_8$ and $\Leech$ lattices and their related Lorentzian lattices in dimensions 10 and 26 discussed in Chapters 26 and 27.
+
+\end{enumerate}
+
+\end{document}
