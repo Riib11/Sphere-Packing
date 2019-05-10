@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.20 (TeX Live 2019) (preloaded format=pdflatex 2019.5.9)  10 MAY 2019 12:25
+This is pdfTeX, Version 3.14159265-2.6-1.40.20 (TeX Live 2019) (preloaded format=pdflatex 2019.5.9)  10 MAY 2019 12:50
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -320,7 +320,7 @@ File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 Here is how much of TeX's memory you used:
  3448 strings out of 494060
  49647 string characters out of 6163036
- 119868 words of memory out of 5000000
+ 120868 words of memory out of 5000000
  7101 multiletter control sequences out of 15000+600000
  7800 words of font info for 31 fonts, out of 8000000 for 9000
  319 hyphenation exceptions out of 8191
@@ -337,7 +337,7 @@ ist/fonts/type1/public/amsfonts/cm/cmr7.pfb></usr/local/texlive/2019basic/texmf
 -dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/local/texlive/2019basic/t
 exmf-dist/fonts/type1/public/amsfonts/cm/cmsy7.pfb></usr/local/texlive/2019basi
 c/texmf-dist/fonts/type1/public/amsfonts/symbols/msbm10.pfb>
-Output written on notes.pdf (1 page, 103449 bytes).
+Output written on notes.pdf (1 page, 105737 bytes).
 PDF statistics:
  52 PDF objects out of 1000 (max. 8388607)
  37 compressed objects within 1 object stream
