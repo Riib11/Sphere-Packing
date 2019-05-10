@@ -10,21 +10,28 @@
 \usepackage{amsthm}
 \usepackage{mathtools}
 
+\renewcommand{\tt}[1]{\text{ #1 }}
+
 \newcommand{\Z}{\mathbb{Z}}
 \newcommand{\R}{\mathbb{R}}
 
 \renewcommand{\i}{^{-1}}
+\newcommand{\degrees}{^\circ}
+\newcommand{\ass}[1]{\left( #1 \right)}
 \newcommand{\set}[1]{\left\{ #1 \right\}}
 
 \newcommand{\Leech}{\Lambda_{24}}
+\newcommand{\Golay}{\mathcal{C}_{24}}
 
 \newcommand{\header}[1]{\noindent\textsc{#1.} }
 
 \begin{document}
 
-\section*{1. The Sphere Packing Problem}
+\section*{1. Sphere Packings and Kissing Numbers}
 
-\subsection*{1.4. $n$-Dimensional Packings}
+\subsection*{1. The Sphere Packing Problem}
+
+\subsubsection*{1.4. $n$-Dimensional Packings}
 
 \header{Definition}
 The \textbf{fcc} lattice is the face-centered cubic lattice.
@@ -50,28 +57,133 @@ Why is is finding dense packings in $n$-dimensions interesting?
 
   \item
   There are direct applications of lattice packings to number theory e.g. solving Diophantic equations and the ``geometry of numbers.'' [Cas2], [Gru1], [Gru1a], [Han3], [Hla1], [Hla3], [Kel1], [Min4], [Min6].
-  (See Section 2.3.)
+  (See subsection 2.3.)
 
   \item
-  There are practical applications of sphere packings to digital communications (see Chapter 3).
+  There are practical applications of sphere packings to digital communications (see section 3).
 
   \item
-  2- and 3-dimensional spheres have many practical applications in general e.g. positioning optical fibers in the cross-section of a cable [Kin1], chemistry, physics, antenna design, X-ray tomography, and statistical analysis (on spheres).
+  2- and 3-dimensional spheres have many practical applications in general e.g. positioning optical fibers in the cross-subsection of a cable [Kin1], chemistry, physics, antenna design, X-ray tomography, and statistical analysis (on spheres).
 
   \item
-  $n$-dimensional packings may be used in the numerical evaluation of integrals, either on the surface of a sphere in $\R^n$ or its interior. (See Section 3.2.)
+  $n$-dimensional packings may be used in the numerical evaluation of integrals, either on the surface of a sphere in $\R^n$ or its interior. (See subsection 3.2.)
 
   \item
-  Dual theory and superstring theory in physics have made use of $E_8$ and $\Leech$ lattices and their related Lorentzian lattices in dimensions 10 and 26 discussed in Chapters 26 and 27.
+  Dual theory and superstring theory in physics have made use of $E_8$ and $\Leech$ lattices and their related Lorentzian lattices in dimensions 10 and 26 discussed in sections 26 and 27.
 
 \end{enumerate}
 
-\subsection*{1.5. Summary of Results in Sphere Packing}
+\subsubsection*{1.5. Summary of Results in Sphere Packing}
 
-TODO: not sure if this is relevant enough to read. I just want the introductory math to write about.
+% TODO: not sure if this is relevant enough to read. I just want the introductory math to write about.
 
-\section*{2. The Kissing Number Problem}
+\subsection*{2. The Kissing Number Problem}
 
-% TODO: hello
+\subsubsection*{2.1. The Problem of the Thirteen Spheres}
+
+The \textbf{kissing problem} is the question of how many equally-sized spheres can touch one central sphere.
+Leech proved that in three dimensions the answer is 12 [Lee2]. (See also [Boe1], [Was1]).
+The problem is so difficult because the 12-arrangement is not unique - in fact there are infinitely many ways to arrange 12 billiard balls around one central one.
+For example, the 12 balls can be placed at positions corresponding to the vertices of regular icosahedron concentric with the central ball, where the twelve out balls do not touch each other and may all be moved freely.
+
+\subsubsection*{2.2. Kissing Numbers in Other Dimensions}
+
+The \textbf{kissing numer}, denoted $\tau$, of a sphere packing in any dimension is the number of spheres that touch a given sphere.
+For a lattice packing, $\tau$ is the same for each sphere.
+For an arbitrary packing, $\tau$ may vary from sphere to sphere.
+
+% TODO: more stuff here, not super interesting
+
+\subsubsection*{2.4. The Construction of Spherical Codes from Sphere Packings}
+
+Let $\Lambda$ be a sphere packing in $\R^n$
+and let the origin be convenient point $P$ (usually the center of a sphere).
+Suppose there are $N$ spheres in $\Lambda$ with centers at distance $u$ from $P$.
+Then these centers, when rescaled by dividing them by $u$, form an $n$-dimensional spherical code of size $N$.
+In other words, we take a \textit{shell} of points around $P$ as the spherical code [Slo12].
+
+The distance between the centers of the spheres is at least $2 \rho$ (where $\rho$ is the radius of a sphere), so hte minimal angle in this code is at least $2 \sin\i(\rho / u)$. The number of points in this code is given by the theta series of the packing with respect to $P$ (see subsection 2.3).
+
+\header{Example}
+Consider the lattice $D_4$, with the origin point $P$ at a lattice point and $\rho = 1/\sqrt{2}$.
+The first shell has $u = \sqrt 2$ and contains 23 centers (the kissing number), and the corresponding spherical code consists of the points $2^{-1/2} (\pm 1, \pm 1, 0, 0)$ with the minimal angle $2 \sin\i (1/2) = 60\degrees$.
+The second shell has $u = 2$ and also contains 24 points, and the spherical code is $60\degrees$, so in this case (53) does not given the exact value of $\phi$. In fact this second code is a rotation of the first.
+Both examples show that $A(4, 60\degrees) \geq 24$.
+
+Alternatively, we can consider a \textbf{deep hole} $P = (1,0,0,0)$ which yields a different sequence of spherical codes.
+The first shell contains 8 points at distance 1 from $P$, forming a code of minimal angle $90\degrees$ (the vertices of a regular 4D generalized octahedron).
+Thus $A(4, 90\degrees) \geq 8$.
+The number of points in these two families of spherical codes are the coefficients of the theta series
+$(1/2)( \theta_3 (2z)^4 + \theta_4 (2z)^4 )$ and $(1/2) \theta_2 (2z)^4$ respectively (see subsection 4.7).
+
+\subsubsection*{2.5 The Construction of Spherical Codes from Binary Codes}
+
+Let $C$ be a binary error-correcting code (see subsection 3.2) of length $n$, and minimal distance $d$.
+A spherical code is obtained by changing the 1s to $-1$s and the 0s to $+1$s in every codeword, and dividing by $\sqrt n$. The resulting points lie on $\Omega_n$ and the minimal angle is given by
+\begin{align*}
+  \phi &= \cos\i\ass{ 1 - \frac{2d}{n} } \\
+  \frac{d}{n} &= \sin^2 \frac{\phi}{2}
+\end{align*}
+
+\header{Example}
+The code containing all $2^n$ binary vectors of length $n$ produces the spherical code consisting of all vertices $n^{-1/2}(\pm 1, \dots, \pm 1)$ of an $n$-dimensional cube. Any other spherical code obtained by the construction is a subset of this.
+Importantly the \textbf{Golay code}, $\Golay$, with $n = 24$, $d = 8$ produces a spherical code containing 4096 points of $\Omega_{24}$ with $\phi = \cos\i(1/3) \approx 70.529\degrees$. Thus $A(24, \cos\i(1/3)) \geq 4096$ (see subsection 3.2.8.2).
+
+\section*{2. Sphere Packing and Error-Correcting Codes}
+
+\header{Definition}
+The \textbf{coordinate array of a point} $x = (x_1, \dots, x_n) \in \Z^n$ is obtained by writing the binary expansion of the coordinates $x_i$ in column, beginning with the least significant digit [Lee5, Section 1.42].
+The $n$th row corresponds to the $2^{n-1}$th place.
+For examples, the coordinate array of $(4,3,2,1,0,-1,-2,-3)$ is
+$$
+\text{see display (1)}
+$$
+
+\subsection*{2. Construction A}
+
+Let $C$ be an $(n,M,d)$ binary code.
+The following construction specifies a set of centers for a sphere packing in $\R^n$.
+
+\header{Definition}
+\textbf{Construction A}: $x = (x_1, \dots, x_n)$ is a center if and only if the 1s row of the coorinate array of $x$ is in $C$.
+A lattice packing is obtained only if $C$ is a linear code.
+
+On the unit cube at the origin,
+$$ \set{ 0 \leq x_i \leq 1 : i \in \set{1,\dots,n} }, $$
+the centers are exactly the $M$ codewords.
+All other centers are obtainedby adding even integers to any of hte coordinates of a codeword.
+This corresponds to shifting the unit cube by two in any direction.
+Thus all centers are obtainedby repeating a building block consisting of a $Q_2 := 2 \times \cdots \times 2$ cube with codewords marked on teh vertices of the $Q_1 := 1 \times \cdots \times 1$ cube in one corner.
+
+Each copy of $Q_2$ constributes $M$ spheres of radius $\rho$ (say), so the center density obtained from construction $A$ is
+$$ \delta = M \rho^n 2^{-n} $$
+If two distinct centers are congruent to the same codeword their distance is a least 2.
+If they are conguent to different codewords, then their distance is at least 1 in at least $d$ places, so are at least $\sqrt d$ apart.
+Thus the radius of the spheres are
+$$ \rho = (1/2) \min \set{ 2, \sqrt d }. $$
+
+\subsubsection*{2.3. Kissing Numbers}
+
+Let $S$ be a sphere with center $x$, where $x$ is congruent to the codeword $c$.
+Candidates for centers closest to $x$ are as follows:
+\begin{enumerate}
+  \item[(a)]
+  There are $2n$ centers of the type $x + ((\pm 2) 0^{n-1})$ at a distance $2$ from $x$.
+
+  \item[(b)]
+  Let $\set{A_i(c)}$ be the weight distribution of $C$ with respect to $c$ (section 2.2 in chapter 3).
+  Since there are $A_d(c)$ codewords at distance $d$ from $c$, there are $2^d A_d(c)$ centers the type $x + ((\pm 1)^d 0^{n-d})$ at a distance $\sqrt d$ from $x$.
+  Therefor the number of spheres touching $S$, the kissing number of S, is
+  \begin{align*}
+    \tau(S) = \begin{cases}
+      2^d A_d(c)     &\tt{if} d < 4 \\
+      2n + 16 A_4(c) &\tt{if} d = 4 \\
+      2n             &\tt{if} d > 4
+    \end{cases}
+  \end{align*}
+\end{enumerate}
+
+\subsubsection{4. Dimensions 3 to 6}
+
 
 \end{document}
