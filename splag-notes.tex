@@ -23,9 +23,16 @@
 \newcommand{\Leech}{\Lambda_{24}}
 \newcommand{\Golay}{\mathcal{C}_{24}}
 
-\newcommand{\header}[1]{\noindent\textsc{#1.} }
+\newcommand{\header}[1]{\vspace{1em}\noindent\textsc{#1.} }
 
 \begin{document}
+
+\begin{center}
+  {\huge\sc Sphere Packing, Lattices, and Groups}\\[2em]
+  {\Large --- Notes ---}
+\end{center}
+
+\vspace{4em}
 
 \section*{1. Sphere Packings and Kissing Numbers}
 
@@ -184,6 +191,73 @@ Candidates for centers closest to $x$ are as follows:
 \end{enumerate}
 
 \subsubsection*{4. Dimensions 3 to 6}
+% TODO: maybe later...
 
+
+
+\section*{3. Codes, Designs and Groups}
+
+\subsection{1. The Channel Coding Problem}
+
+\header{Theorem 1.1}
+\textbf{The Sampling Theorem}.
+If $f(t)$ is a signal containing no components of frequency greater than $W$ cycles per second, then $f(t)$ is completely specified by its samples
+$$ \dots, f \ass{-\frac{1}{2W}}, f(0), f\ass{\frac{1}{2W}}, f\ass{\frac{2}{2W}}, \dots $$
+which are taken every $1/(2W)$ seconds [Lee0].
+The \textbf{cardinal series} describes $f(t)$ in terms of its sample values:
+$$ f(t) = \sum_{k = -\infty}^\infty f\ass{\frac{k}{2W}} \frac{\sin 2\pi W (t - l/(2W))}{2\pi W (t- l/(2W))} $$
+The \textbf{energy} in $f(t)$ is given by
+$$ \int_{-\infty}^\infty f(t)^2 dt = \frac{1}{2W} \sum_{-\infty}^\infty f\ass{\frac{k}{2W}}^2 $$
+
+The sampling theorem is the basis for the digital transmission system \textbf{pulse code modulation (PCM)}.
+It is an alternative to \textbf{amplitude modulation (AM)} and \textbf{frequency modulation (PM)} and is good for medium distance telephone calls.
+
+If the signal $f(t)$ lasts for $T$ seconds, then there are $n = 2TW$ samples, e.g.
+$$ \ass{ f(0), f(1/(2W)), f(2/(2W)), \dots, f((n-1)/(2W)) } $$
+These are coordinates of $n$-dimensional space.
+Thus the sampling theory yields that $f(t)$ can be represented by a single point $F \in \R^n$.
+Additionally, the norm of $F$ is the energy in $f(t)$:
+$$ N(F) = F \cdot F = 2W \int_0^T f(t)^2 dt = 2WTP = nP $$
+where
+$$ p = \frac 1 T \int_0^T f(t)^2 dt $$
+is the \textbf{average power} in the signal.
+
+\subsubsection{2. Shannon's Theorem}
+
+Claude Shannon wrote a paper using all of this called \textit{A Mathematical Theorem of Communication}.
+
+\header{Definition}
+A \textbf{binary symmetric channel} is one in which only sequences of 0s and 1s are transmitted and received.
+
+\header{Definition}
+A \textbf{Gaussian white noise channel} transmits continuous signals.
+The cutoff frequency of the channel, $W$ is called the \textbf{bandwidth}.
+All frequencies above $W$ are attenuated completely, all below $W$ are passed without attenuation.
+In the course of transmitting the signal, the channel adds Gaussian white noise to it.
+
+A transmitted signal $f(t)$ is represented by the point $F = (f_1, \dots, f_n)$.
+During transmission the point is perturbed by the addition of a noise vector $Y = (y_1, \dots, y_n)$
+whose components are independent Gaussian random variables with mean 0 and variance $\sigma^2$.
+The received signal is represented by $F + Y$.
+
+\header{Definition}
+The \textbf{rate} of the code is defined to be
+$$ R := \frac{1}{T} \log_2 M \tt{bits per second} $$
+The decoder find the closest point to the received vector and from that reconstructs the signal.
+If the noise is too large, then $F + Y$ may be closer to a different point than $F$, which results in a decoding error.
+
+A way to reduce the chance of error is to place the code points further apart.
+However, this requires signals with greater energy and increases the cost of transmission.
+
+\header{Theorem}
+One of Shannon's basic theorems is that, it turns out, it is possible to construct a decoding scheme that results in negligible error and uses finite power, provided that the rate of the code does not exceed a threshold called the \textbf{capacity} of the channel.
+The statement of the theorem is the following:
+For any rate $R$ less than the capacity $C = W \log_2 \ass{1 + \frac{P}{\sigma^2}}$ i.e.
+$$ R < C = W \log_2 \ass{1 + \frac{P}{\sigma^2}}, $$
+then by making $T$ and hence $n = 2WT$ sufficiently large we can find a code of rate $R$ and average power at most $P$ for which the probability of a decoding error is arbitrary small.
+Conversely, such codes do not exist for $R \gg C$.
+For a rigorous proof see [Sha2, Sha6].
+
+More precise versions of this theorem show how the probability $P_e$ of a decoding error drops as the dimension $n$ increases, for a fixed rate $R$.
 
 \end{document}
