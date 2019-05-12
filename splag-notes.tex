@@ -14,10 +14,15 @@
 
 \newcommand{\Z}{\mathbb{Z}}
 \newcommand{\R}{\mathbb{R}}
+\newcommand{\F}{\mathbb{F}}
 
+\renewcommand{\=}{\equiv}
+\newcommand{\erfc}{\text{erfc}}
 \renewcommand{\i}{^{-1}}
 \newcommand{\ra}{\rightarrow}
 \newcommand{\degrees}{^\circ}
+\newcommand{\p}{^\prime}
+\newcommand{\pp}{^{\prime\prime}}
 \newcommand{\ass}[1]{\left( #1 \right)}
 \newcommand{\set}[1]{\left\{ #1 \right\}}
 
@@ -37,9 +42,9 @@
 
 \section*{1. Sphere Packings and Kissing Numbers}
 
-\subsection*{1. The Sphere Packing Problem}
+\subsection*{1.1 The Sphere Packing Problem}
 
-\subsubsection*{1.4. $n$-Dimensional Packings}
+\subsubsection*{1.1.4. $n$-Dimensional Packings}
 
 \header{Definition}
 The \textbf{fcc} lattice is the face-centered cubic lattice.
@@ -81,20 +86,20 @@ Why is is finding dense packings in $n$-dimensions interesting?
 
 \end{enumerate}
 
-\subsubsection*{1.5. Summary of Results in Sphere Packing}
+\subsubsection*{1.1.5. Summary of Results in Sphere Packing}
 
 % TODO: not sure if this is relevant enough to read. I just want the introductory math to write about.
 
-\subsection*{2. The Kissing Number Problem}
+\subsection*{1.2. The Kissing Number Problem}
 
-\subsubsection*{2.1. The Problem of the Thirteen Spheres}
+\subsubsection*{1.2.1. The Problem of the Thirteen Spheres}
 
 The \textbf{kissing problem} is the question of how many equally-sized spheres can touch one central sphere.
 Leech proved that in three dimensions the answer is 12 [Lee2]. (See also [Boe1], [Was1]).
 The problem is so difficult because the 12-arrangement is not unique - in fact there are infinitely many ways to arrange 12 billiard balls around one central one.
 For example, the 12 balls can be placed at positions corresponding to the vertices of regular icosahedron concentric with the central ball, where the twelve out balls do not touch each other and may all be moved freely.
 
-\subsubsection*{2.2. Kissing Numbers in Other Dimensions}
+\subsubsection*{1.2.2. Kissing Numbers in Other Dimensions}
 
 The \textbf{kissing numer}, denoted $\tau$, of a sphere packing in any dimension is the number of spheres that touch a given sphere.
 For a lattice packing, $\tau$ is the same for each sphere.
@@ -102,7 +107,7 @@ For an arbitrary packing, $\tau$ may vary from sphere to sphere.
 
 % TODO: more stuff here, not super interesting
 
-\subsubsection*{2.4. The Construction of Spherical Codes from Sphere Packings}
+\subsubsection*{1.2.4. The Construction of Spherical Codes from Sphere Packings}
 
 Let $\Lambda$ be a sphere packing in $\R^n$
 and let the origin be convenient point $P$ (usually the center of a sphere).
@@ -124,7 +129,7 @@ Thus $A(4, 90\degrees) \geq 8$.
 The number of points in these two families of spherical codes are the coefficients of the theta series
 $(1/2)( \theta_3 (2z)^4 + \theta_4 (2z)^4 )$ and $(1/2) \theta_2 (2z)^4$ respectively (see subsection 4.7).
 
-\subsubsection*{2.5 The Construction of Spherical Codes from Binary Codes}
+\subsubsection*{1.2.5. The Construction of Spherical Codes from Binary Codes}
 
 Let $C$ be a binary error-correcting code (see subsection 3.2) of length $n$, and minimal distance $d$.
 A spherical code is obtained by changing the 1s to $-1$s and the 0s to $+1$s in every codeword, and dividing by $\sqrt n$. The resulting points lie on $\Omega_n$ and the minimal angle is given by
@@ -137,7 +142,7 @@ A spherical code is obtained by changing the 1s to $-1$s and the 0s to $+1$s in 
 The code containing all $2^n$ binary vectors of length $n$ produces the spherical code consisting of all vertices $n^{-1/2}(\pm 1, \dots, \pm 1)$ of an $n$-dimensional cube. Any other spherical code obtained by the construction is a subset of this.
 Importantly the \textbf{Golay code}, $\Golay$, with $n = 24$, $d = 8$ produces a spherical code containing 4096 points of $\Omega_{24}$ with $\phi = \cos\i(1/3) \approx 70.529\degrees$. Thus $A(24, \cos\i(1/3)) \geq 4096$ (see subsection 3.2.8.2).
 
-\section*{2. Sphere Packing and Error-Correcting Codes}
+\section*{5. Sphere Packing and Error-Correcting Codes}
 
 \header{Definition}
 The \textbf{coordinate array of a point} $x = (x_1, \dots, x_n) \in \Z^n$ is obtained by writing the binary expansion of the coordinates $x_i$ in column, beginning with the least significant digit [Lee5, Section 1.42].
@@ -147,7 +152,7 @@ $$
 \text{see display (1)}
 $$
 
-\subsection*{2. Construction A}
+\subsection*{2.2. Construction A}
 
 Let $C$ be an $(n,M,d)$ binary code.
 The following construction specifies a set of centers for a sphere packing in $\R^n$.
@@ -170,7 +175,7 @@ If they are conguent to different codewords, then their distance is at least 1 i
 Thus the radius of the spheres are
 $$ \rho = (1/2) \min \set{ 2, \sqrt d }. $$
 
-\subsubsection*{2.3. Kissing Numbers}
+\subsubsection*{2.2.3. Kissing Numbers}
 
 Let $S$ be a sphere with center $x$, where $x$ is congruent to the codeword $c$.
 Candidates for centers closest to $x$ are as follows:
@@ -191,14 +196,14 @@ Candidates for centers closest to $x$ are as follows:
   \end{align*}
 \end{enumerate}
 
-\subsubsection*{4. Dimensions 3 to 6}
+\subsubsection*{2.2.4. Dimensions 3 to 6}
 % TODO: maybe later...
 
 
 
 \section*{3. Codes, Designs and Groups}
 
-\subsection{1. The Channel Coding Problem}
+\subsection*{3.1. The Channel Coding Problem}
 
 \header{Theorem 1.1}
 \textbf{The Sampling Theorem}.
@@ -223,7 +228,7 @@ where
 $$ p = \frac 1 T \int_0^T f(t)^2 dt $$
 is the \textbf{average power} in the signal.
 
-\subsubsection{2. Shannon's Theorem}
+\subsubsection*{3.1.2. Shannon's Theorem}
 
 Claude Shannon wrote a paper using all of this called \textit{A Mathematical Theorem of Communication}.
 
@@ -263,14 +268,17 @@ More precise versions of this theorem show how the probability $P_e$ of a decodi
 
 Additionally, a rigorous proof of the previous theorem shows that for small values of $\sigma$, finding an optimal code of maximal power $P$ is closely related to finding the densest packing of spheres in $\R^n$.
 
-\subsubsection*{3. Error Probability}
+\subsubsection*{3.1.3. Error Probability}
 
 Suppose the code consists of $M$ more code points $C_1, \dots, C_M$ in $\R^n$.
 Let $V(C_k)$ be the Voronoi cell for $C_k$.
 Given that $C_k$ is transmitted, the decoder makes the correct decision if and only if hte noise vector $Y$ is in $V(C_k)$, an even of probability
-$$ \frac{1}{(\sigma \sqrt{2\pi})^2} \int_{V(C_k)} e^{-x \cdot x/(2\sigma^2)} dx $$
+$$ \frac{1}{(\sigma \sqrt{2\pi})^2} \int_{V(C_k)} e^{-x \cdot x/(2\sigma^2)} dx. $$
 Assuming that all code points are equally likely to be used, the error probability for this code is
 $$ P_e = 1 - \frac{1}{M} \sum_{k=1}^M \frac{1}{(\sigma \sqrt{2\pi})^2} \int_{V(C_k)} e^{-x \cdot x/(2\sigma^2)} dx $$
+If all the Voronoi cells are congruent, say to some polytope $\Pi$, this simplifies to
+$$ P_e = 1 - \frac{1}{(\sigma \sqrt{2\pi})^n} \int_\Pi e^{-x \cdot x/2\sigma^2} dx. $$
+
 Then one version of the Gaussian channel coding problem can we stated as the following.
 Given the dimension $n$, the number of code points $M$, and a power constraint
 $$ N(C_K) \leq nP, k \in \set{1, \dots, M}, $$
@@ -290,7 +298,7 @@ Let $\Lambda$ be a lattice with $\Pi$ of volume 1.
   \item For the channel coding problem we minimize $P_e$.
 \end{itemize}
 
-\subsubsection*{4. Lattice codes for the Gaussian channel.}
+\subsubsection*{3.1.4. Lattice codes for the Gaussian channel}
 
 In one dimension, there is only one lattice.
 In two dimensions, the optimality of the hexagonal lattice for all $\sigma$ follows by taking $f(x) = (\sigma \sqrt{2\pi})\i \exp\set{-x^2/(2\sigma^2)}$ in the theorem on page 81 of [Fej101].
@@ -298,16 +306,102 @@ In higher dimensions, the problem depends on the value of $\sigma$.
 
 Assume $\sigma$ is small.
 From equation 20, can approximate $P_e$ by
-$$ P_e\i = \frac{\tau}{2} \text{erfc} \ass{\frac{\rho}{\sigma\sqrt 2}} $$
+$$ P_e\i = \frac{\tau}{2} \erfc \ass{\frac{\rho}{\sigma\sqrt 2}} $$
 Let the code consist of all lattice points $C$ with $N(C) \leq nP$.
 The number of points $M$ is given by
 $$ M \cdot V_n \rho^n = \Delta \cdot V_n (nP)^{n/2} (1 + o(1)) $$
-where $o(1) \ra 0$ as $M \ra \infty$.
+where $o(1) \ra 0$ as $M \ra \infty$
+and $\Delta$ is the \textbf{lattice density}.
 So,
 $$ \rho = \sqrt{nP} \ass{\frac{\Delta}{M}}^{1/n} (1 + o(1)) $$
 The average norm of the code points is
 $$ \frac{n}{n+2} \cdot n P (1 + o(1)) $$
+Define the \textbf{rate} of the code to be
+$$ R := \frac{1}{n} \log_2 M \tt{bits per dimension} $$
+rather than before with $1/T$ and bits per second.
+Then
+$$ \rho = \frac{\sqrt{nP}}{2^R} \Delta^{1/2} (1 + o(1)) $$
+Define also the \textbf{normalized signal-to-noise ration} of the code to be
+$$ S := \frac{P}{2^{2R}\sigma^2} = \frac{P}{M^2 \sigma^2} $$
+Then finally by combining the last few formulas we have the following estimate for the error of the probability of a Gaussian channel code with normalized signal-to-noise ratio $S$, obtained from an $n$-dimensional lattice of density $\Delta$ and kissing number $\tau$.
+$$ P_e\pp = \frac{\tau}{2} \ass{ \sqrt{\frac{nS}{2}} \Delta^{1/2} } $$
+This estimate gains accuracy with increasing $S$.
+For large values of $x$,
+$$ \erfc(x) \sim \frac{1}{x \sqrt{\pi}} e^{-x^2} $$
+and therefor
+$$ \log P_e\pp \sim \tt{constant} - \ass{ \frac{1}{2} n \Delta^{2/n} \log e } S $$
 
-% TODO: and more
+\begin{center}
+  Figure 3.3: graph of smallest known noise ratio for various lattices as a function of $S$
+\end{center}
+
+Also shown some exact results for various low dimensional lattices using Monte Carlo integration (in section 3).
+
+\subsection*{3.2. Error-correcting Codes}
+
+\subsubsection*{3.2.1. The error-correcting code problem}
+
+The other idealized model for a channel was the \textbf{binary symmetric channel}, where the input and output symbols are 0s and 1s, and there is some fixed probability $p < 1/2$ that when a 0 or 1 is transmitted, the other symbol is received.
+A \textbf{binary code} C of length $n$ is a set of binary vectors (called \textbf{codewords}) with $n$ coordinates, or in other words is a subset of $\F_2^n$ where $F_2 = \set{0,1}$ is the Galois field of order 2.
+
+\header{Definition}
+A \textbf{q-ary} code is a subset of $\F_q^n$ where $q$ is a prime or prime-power.
+Besides $\F_2$, $\F_3 = \set{0,1,-1}$ and $\F_4 = \set{0,1,\omega,\omega^2}$ are especially interesting.
+
+\header{Definition}
+The \textbf{Hamming distance} between two vectors $u, v \in \F_q^n$ is defined to be the number of coordinates where they differ, i.e.
+$$ d(u, v) := |\set{ i : u_i \neq v_i }| $$
+The \textbf{(Hamming) weight} $wt(u)$ of a vector $u$ is the number of nonzero coordinates $u_i$; therefor
+$$ d(u, v) = wt(u - v) $$
+The \textbf{minimal distance} $d$ of a code is
+$$ d = \min \set{ d(u, v) : u, v \in C \land u \neq v } $$
+If a code has minimal distance $d$, the \textbf{Hamming spheres} of radius $\rho = [(1/2) (d-1)]$ around the codewords are disjoint and therefor the code can correct $\rho$ errors.
+Note that $\rho$ is the packing radius of the code.
+A code length $n$, containing $M$ codewords and with minimal distance $d$ is said to be a $(n, M, d)$ code.
+
+\header{Definition}
+A \textbf{linear} (or \textbf{group}) code $C$ is a linear subspace of $\F_q^n$: the set of codewords is closed under vector addition and coordinate-wise multiplication of this space, and there are $q^k$ codewords.
+The rate of the code is
+$$ R = \frac{1}{n} \log_2 M = \frac{k}{n} \log_2 q \tt{bits per symbol.} $$
+A linear code of length $n$, dimension $k$ and minimal distance $d$ is said to be a $[n, k, d]$ code.
+the minimal distance of a linear code is the minimal nonzero weight of any codeword:
+$$ d = \min\set{ wt(u) : u \in C \land u \neq 0 } $$
+
+\header{Definition}
+The \textbf{error-correcting code problem} is the following: given $n$ and $d$, find the maximal number of of codewords in any $(n, M, d)$ code, called $A(n, d)$.
+A good code has $n$ small (reduces delays), $M$ large (to make efficient use of the channel), and $d$ large (to correct many errors). But these features trade off with each other.
+There is a similar problem for linear codes.
+The general problem is unsolved, but upper and lower bounds on $A(n, d)$ have been found.
+
+\begin{center}
+  Table 9.1 in Chapter 9 of the found $A(n, d)$
+\end{center}
+
+\subsubsection*{3.2.2. Further definitions from coding theory}
+
+% TODO
+More definitions and various specific constructions.
+
+\subsubsection*{3.2.8. Quadratic Resudue Codes}
+
+Let $p, n$ be primes such that $p$ is a square mod $n$.
+For $p = 2$, $n$ is a prime of the form $8m \pm 1$ i.e. $n \=_8 \pm 1$.
+The \textbf{quadratic residue} code of length $n$ over $F_p$ is the cyclic code whose generator polynomial has roots
+$$\set{ \alpha^i : i \neq 0 \tt{is a square mod} n }$$
+References: [Lin11], [Mac6, Chapter 16], [Leo5, Leo6].
+The dimension of this code is $(n+1)/2$.
+The extended quadratic residue code is obtained by appending a zero-sum check digit. If $n$ is of the form $4a - 1$, then the extended code is self-dual. In particular, extended binary quadratic residue odes of length $8m$ are self-dual Type II codes.
+
+\header{Examples}
+Some examples.
+
+The Golay codes are studied in more detail in Chapters 10 and 11.
+
+
+
+
+
+
+
 
 \end{document}
