@@ -15,7 +15,10 @@
 \newcommand{\Z}{\mathbb{Z}}
 \newcommand{\R}{\mathbb{R}}
 \newcommand{\F}{\mathbb{F}}
+\newcommand{\E}{\mathcal{E}}
 
+\newcommand{\mt}{\mapsto}
+\newcommand{\floor}[1]{\left\lfloor #1 \right\rfloor}
 \renewcommand{\=}{\equiv}
 \newcommand{\erfc}{\text{erfc}}
 \renewcommand{\i}{^{-1}}
@@ -25,6 +28,9 @@
 \newcommand{\pp}{^{\prime\prime}}
 \newcommand{\ass}[1]{\left( #1 \right)}
 \newcommand{\set}[1]{\left\{ #1 \right\}}
+\renewcommand{\v}{\vec}
+\newcommand{\x}{{\v x}}
+\newcommand{\y}{{\v y}}
 
 \newcommand{\Leech}{\Lambda_{24}}
 \newcommand{\Golay}{\mathcal{C}_{24}}
@@ -33,6 +39,8 @@
 
 \newcommand{\definition}[1]{\vspace{1em}\noindent\textbf{Definition #1.} }
 \newcommand{\theorem}[1]{\vspace{1em}\noindent\textbf{Theorem #1.} }
+
+\newcommand{\todo}[1]{(TODO: #1)}
 
 \begin{document}
 
@@ -57,21 +65,21 @@
 Consider the scenario where a person, Alex, wants to send a message another person, Beth, via a noisy electrical channel.
 To facilitate such a transmission, a few pieces of equipment and processes are involved.
 First, Alex comes up with the message that he would like to transmit and writes it down in the form of an $m$-tuple,
-$$ \vec a = (a_m, \dots, a_m). $$
-Then, Alex uses a machine called a \textbf{encoder} that maps $\vec a$ to an $n$-tuple,
-$$ \vec x = (x_1, \dots, x_n). $$
-$\vec x$ is a \textbf{codeword} - one of some number of possible codewords in the encoder's image.
+$$ \v a = (a_m, \dots, a_m). $$
+Then, Alex uses a machine called a \textbf{encoder} that maps $\v a$ to an $n$-tuple,
+$$ \x = (x_1, \dots, x_n). $$
+$\x$ is a \textbf{codeword} - one of some number of possible codewords in the encoder's image.
 Note that there must be at least as many codewords as there are possible original messages.
 
 Next, $x$ is transmitted to Beth as an electrical signal along a channel.
-During the transmission, some random noise $\vec e$ is added to the signal, where $\vec e$ is a $n$-tuple.
-The resulting signal that Beth recieves is $\vec r := \vec x + \vec e$.
+During the transmission, some random noise $\v e$ is added to the signal, where $\v e$ is a $n$-tuple.
+The resulting signal that Beth recieves is $\v r := \x + \v e$.
 
-In an attempt to correctly recover $\vec a$ from $\vec r$, Beth uses a machine called an \textbf{decoder}.
-The decoder calculates the most likely codeword $\vec x\p$ that could have resulted in $\vec r$,
-and then outputs the message $\vec a\p$ that corresponds to $\vec x\p$ via inverse-encoding.
-If $\vec r$ is exactly a codeword, then $\vec x\p = \vec r$.
-However, if $\vec r$ is not exactly a codeword, then the decoder finds the \textit{closest} codeword to $\vec r$ in the space of the encoder's codomain (recall that are a subset of this codomain, the encoder's image).
+In an attempt to correctly recover $\v a$ from $\v r$, Beth uses a machine called an \textbf{decoder}.
+The decoder calculates the most likely codeword $\x\p$ that could have resulted in $\v r$,
+and then outputs the message $\v a\p$ that corresponds to $\x\p$ via inverse-encoding.
+If $\v r$ is exactly a codeword, then $\x\p = \v r$.
+However, if $\v r$ is not exactly a codeword, then the decoder finds the \textit{closest} codeword to $\v r$ in the space of the encoder's codomain (recall that are a subset of this codomain, the encoder's image).
 
 The \textbf{coding problem} is the problem of devising an encoder/decoder pair that efficiently (in regards to some set of concerned features) and accurately faciliates transmissions like the one above. A construction of codewords of length $n$ is referred to as a \textbf{code}, $C$.
 
@@ -98,7 +106,7 @@ Using this method, the probability of decoder error is
   P_e(N) := \sum_{0 \leq k \leq N/2} \binom{N}{k} q^k p^{N-k}.
 \end{align}
 Furthermore,
-$$ \lim_{N \ra \infty} P_e(N) \ra 0 $$
+$$ \lim_{N \ra \infty} P_e(N) = 0 $$
 % TODO: proof
 so Alex and Beth can achieve arbitrarily accurate communication given enough time.
 The time constraint was an important obstacle after all!
@@ -107,36 +115,133 @@ The time constraint was an important obstacle after all!
 % ----------------------------------------------------------------------------------------------------------------------------
 \section{Shannon's Theorem}
 
-The obviously unsatisfying aspect of the ``solution'' in section \ref{sec:trans-spec}, other than the ignorance of a time constraint, is that it is extremely wasteful. There should have to be a good excuse for having to send a message any more than once.
+The obviously unsatisfying aspect of the ``solution'' in section~\ref{sec:trans-spec}, other than the ignorance of a time constraint, is that it is extremely wasteful. There should have to be a good excuse for having to send a message any more than once.
 In turns out that, in fact, there are much better ways of achieving accuracy even within time and other constraints.
 Shannon's theorem states that, in the same situation as originally described in \ref{sec:trans-spec}, Alex and Beth can still achieve arbitrarily small error probability.
 
-\definition{2.0.1}
+\definition{2.0.1} \label{eq:defR}
 Let $C$ be a code with codewords of length $n$. Then the \textbf{information rate} of the code is
 $$ R := n\i \log_2 |C|. $$
 
 \definition{2.0.2}
-Let $\vec x, \vec y \in \F_2^n$. Then their \textbf{Hamming distance} is
-$$ d(\vec x, \vec y) := |\set{ i : x_i \neq y_i }| $$
+Let $\x, \y \in \F_2^n$. Then their \textbf{Hamming distance} is
+$$ d(\x, \y) := |\set{ i : x_i \neq y_i }| $$
 
 Suppose we have a binary symmetric channel with transmission-error probability $p$, and $q := 1 - p$.
-Let $C = \set{ \vec x_i }$ be a code of $M$ words of length $n$, where each of the words are encoded to with equal probability.
-Suppose the decoder uses \textbf{maximum-likelihood} decoding i.e. the decoder decodes a recieved signal to the codeword that was most likely to be the original signal.
-Let $P_i$ be the probability that the decoder is incorrect given that $\vec x_i$ is transmitted.
+Let $C = \set{ \x_i }$ be a code of $M$ words of length $n$, where each of the words are encoded to with equal probability.
+Suppose the decoder uses \textbf{maximum-likelihood} decoding i.e. the decoder decodes a received signal to the codeword that was most likely to be the original signal.
+Let $P_i$ be the probability that the decoder is incorrect given that $\x_i$ is transmitted.
 So, the probability of an incorrect decoding is
 \begin{align}
   P_C := M\i \sum_{i=1}^M P_i
 \end{align}
 Finally, define
 \begin{align}
-  P^*(M, n, p) := \min{ P_C : C \tt{is a code with $M$ words of length $n$} }
+  P^*(M, n, p) := \min\set{ P_C : C \tt{is a code with $M$ words of length $n$} }
 \end{align}
 
 \theorem{2.0.1}
 (Shannon's theorem)
+$$
+0 < R < 1 + p \log p + q \log q
+\implies \lim_{n \ra \infty} P^*(M_n, n, p) = 0
+$$
+where $M_n := 2^{[Rn]}$ and all logarithms have base 2.
 
+\begin{proof}
+Observe that the probability of an error pattern with $w$ errors is $p^w q^{-w}$, which depends only on $w$.
+Denote the probability of receiving $\y$ given that $\x$ is transmitted by $P(y|x)$.
+Then also note that $P(\y|\x) = P(\x|\y)$.
 
+The number of errors in a received word is a random variable with expected value $np$ and variance $np(1-p) = npq$.
+Let $\epsilon > 0$ and
+$$ b := \ass{\frac{np(1-p)}{\epsilon/2}}^{1/2}. $$
+Then by Chebyshev's inequality \todo{cite 1.4.1}, we have
+\begin{equation} \label{eq:cheby}
+  P(w > np + b) \leq \frac{\epsilon}{2}
+\end{equation}
+Let $\rho := \floor{np + b}$.
+Then since $p < \frac 1 2$, $\rho$ is less than $\frac{n}{2}$ when $n$ is sufficiently large \todo{show this}.
+Define
+\begin{align}
+  B_\rho(\x) := \set{ \y : d(\x, \y) \leq \rho }
+\end{align}
+which is the ball of radius $\rho$ around $\v x$.
+Then \todo{cite Lemma 1.4.3} yields that
+\begin{align}
+  |B_\rho(\x)| = \sum_{i \leq \rho} \binom{n}{i} < \frac{1}{2} \binom{n}{\rho} \leq \frac{n}{2} \frac{n^2}{\rho^\rho(n - \rho)^{n - \rho}}
+\end{align}
 
+We will use the following estimates:
+\begin{align} \label{eq:estimates}
+  \frac{\rho}{n} \log \frac{\rho}{n} = \frac{1}{n} \floor{np + b} \log \frac{\floor{np + b}}{n}
+  &= p \log p + O(n^{-1/2}) \\
+  \lim_{n \ra \infty} \ass{\ass{1 - \frac{\rho}{n}} \log \ass{1 - \frac{\rho}{n}}}
+  &= q \log q + O(n^{-1/2})
+\end{align}
+
+Define
+\begin{align}
+  f :
+  \F_2^n \times \F_2^n &\ra \F_2 \\
+  (\v u, \v v) &\mt \begin{cases}
+    0 &\tt{if} d(\v u, \v v) > \rho \\
+    1 &\tt{if} d(\v u, \v v) \leq \rho
+  \end{cases}
+\end{align}
+
+For $\x_i \in C$ and $\y \in \F_2^n$, define
+\begin{align*}
+  g_i :
+  \F_2^n &\ra \Z \\
+  \y &\mt 1 - f(\y, \x_i) + \sum_{j \neq i} f(\v y, \x_j)
+\end{align*}
+$g_i$ is a function that counts the number of codewords other than $\x_i$ such that $d(\x_i, \y) \leq \rho$.
+
+Now, choose $M$ codewords $\x_1, \dots, \x_M$ at random independently.
+Then the decoding algorithm is as follows.
+Suppose the decoder receives $\y$.
+If there is exactly one codeword $\x_i$ such that $d(\x_i, \y) \leq \rho$, i.e. $!\exists i : g_i(\y) = 0$, then decode $\y$ as $\x_i$.
+If there is not such $\x_i$, then the decoder has detected an error, and if it must decode anyway it outputs $\x_1$ as a default.
+
+So $P_i$, the probability of error (as decidedd by the decoder algorithm), is such that
+$$
+  P_i
+  \leq \sum_{\y \in \F_2^n} P(\y|\x_i) g_i(\y)
+  = \sum_{\y} P(\y|\x_i)(1 - f(\y, \x_i)) + \sum_{\y} \sum_{j \neq i} P(\y|\x_j) f(\y, \x_j)
+$$
+where the right term is the probability that the received word $\y$ is not in $B_\rho(\x_i)$.
+By equation~\ref{eq:cheby}, $P_i \leq \frac{\epsilon}{2}$.
+Then,
+$$ P_C \leq \frac{\epsilon}{2} + M\i \sum_{i = 1}^M \sum_{\y} \sum_{j \neq i} P(\y|\x_i) f(\y, \x_j). $$
+Since $\x_1, \dots, \x_M$ were chosen at random, we have
+\begin{align*}
+  P^*(M, n, p)
+  &\leq \frac{\epsilon}{2} + M\i \sum_{i = 1}^M \sum_{\y} \sum_{j \neq i} \E(P(\y|\x_i)) \E(f(\y, \x_j)) \\
+  &= \frac{\epsilon}{2} + M\i \sum_{i = 1}^M \sum_{\y} \sum_{j \neq i} \E(P(\y|\x_i)) \cdot \frac{|B_\rho|}{2^n} \\
+  &= \frac{\epsilon}{2} + (M - 1)2^{-n} |B_\rho|.
+\end{align*}
+Next, applying the estimates \ref{eq:estimates}, we have
+$$ P^*(M, n, p) \leq n\i \log(P^*(M,n,p) - \frac{\epsilon}{2}) \leq n\i \log_M - (1 + p \log p + q \log q) + O(\sqrt{n}) $$
+where $O(\sqrt{n})$ is a polynomial that is asymptotically equivalent to $\sqrt{n}$.
+Lastly we can substitute $M_n$ for $M$, allowing the number of words, $M$ in the code to depend on $n$, and use the restriction on $R$, $0 < R < 1 + p \log p + q \log q$, to get
+$$ n\i \log(P^*(M_n, n, p) - \frac{\epsilon}{2}) < - \beta < 0 $$
+from the definition of $R$ (definition~\ref{eq:defR}), for $$n > N := \frac{-\log\frac{\epsilon}{2}}{\beta}.$$
+In other words,
+\begin{align*}
+  P^*(M_n, n, p) < \frac{\epsilon}{2} + 2^{-\beta n}.
+\end{align*}
+Thus
+\begin{align*}
+  P^*(M_n, n, p)
+  < \frac{\epsilon}{2} + 2^{-\beta n}
+  < \frac{\epsilon}{2} + \frac{\epsilon}{2}
+  = \epsilon.
+\end{align*}
+\end{proof}
+
+This result was first published in C.E. Shannon's paper \textit{Mathematical theory of communication} (1948), and is popularly recognized as origin of coding theory.
+The key concept that the theory illustrates is that \textbf{good codes} exist, where a good code is a code both usefully accurate yet more efficient than the unenightening code presented in section~\ref{sec:trans-spec}.
 
 % ----------------------------------------------------------------------------------------------------------------------------
 % ----------------------------------------------------------------------------------------------------------------------------
