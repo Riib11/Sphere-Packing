@@ -34,10 +34,58 @@
 \begin{document}
 
 \begin{center}
-  {\huge\sc Sphere Packing, Lattices, and Groups}\\[2em]
+  {\huge\sc Introduction to Coding Theory}\\[2em]
   {\Large --- Notes ---}
 \end{center}
 
 \vspace{4em}
+
+% ----------------------------------------------------------------------------------------------------------------------------
+% ----------------------------------------------------------------------------------------------------------------------------
+\setcounter{section}{1}
+\section{Shannon's Theorem}
+
+\subsection{Introduction}
+
+\textbf{Codewords} are elements of $\F_2^n$.
+Random \textbf{noise} is added to the codewords view vector addition.
+The resulting vector may result in \textbf{errors} when decoded by the decoder.
+
+Example of a situation where codes are used. Shows that if given infinite time, then can decrease chance of error to arbitrarily small. However, Shannon's theorem shows that you can still get arbitrarily small error rate even in finite situation.
+
+\header{Definition}
+If a code $C$ is used consisting of words of length $n$, then
+$$ R := n\i \log_2 |C| $$
+is called the \textbf{information rate} of the code.
+
+\header{Definition}
+For $x,y \in \F_2^n$, the \textbf{Hamming distance} is
+$$ d(x,y) := \set{ i : x_i \neq t_i } $$
+
+\subsection{Shannon's Theorem}
+
+There is probability $p$ that a symbol is recieved in error, and probability $q := 1 - p$ that not.
+Use code word $C$ consisting of $M$ words of length $n$, each word occuring with equal probability.
+If $x_1, \dots, x_M$ are the codewords and we use maximum-likelihood-decoding, let $P_i$ be hte probability of making an incorrect decision given that $x_i$ is transmitted. In that case, the probability of incorrect decoding of a received word is
+$$ P_C := M\i \sum_{i=1}^M P_i $$
+Define
+$$ P^*(M, n, p) := \min\set{ P_C : C \tt{a codeword of $M$ words of length $n$} } $$
+
+\header{Theorem} (Shannon 1948)
+If $0 < R < 1 + p \log p + q \log q$ and $M_n := 2^{[Rn]}$ then $P^*(M_n, n, p) \ra 0$ if $n \ra \infty$.
+
+Note that all logs are base 2.
+For $\epsilon > 0$ and $n$ sufficiently large, there is a code $C$ of length $n$ with rate nearly 1 and such taht $P_C < \epsilon$.
+
+\header{Definition}
+The probability of an error pattern with $w$ errors is $p^w q^{n-q}$ (depends on $w$ only).
+The probability of receiving $y$ given that $x$ is transmitted, denoted $P(y|x)$, is equal to $P(x|y)$.
+
+
+
+% ----------------------------------------------------------------------------------------------------------------------------
+% ----------------------------------------------------------------------------------------------------------------------------
+\setcounter{section}{2}
+\section{Linear Codes}
 
 \end{document}
