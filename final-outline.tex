@@ -1,0 +1,188 @@
+\documentclass{article}
+
+\usepackage[paper=a4paper, verbose, centering, margin=1.3in]{geometry}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{centernot}
+\usepackage{graphicx}
+\usepackage{amsthm}
+\usepackage{mathtools}
+
+\renewcommand{\tt}[1]{\text{ #1 }}
+
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\F}{\mathbb{F}}
+
+\renewcommand{\=}{\equiv}
+\newcommand{\erfc}{\text{erfc}}
+\renewcommand{\i}{^{-1}}
+\newcommand{\ra}{\rightarrow}
+\newcommand{\degrees}{^\circ}
+\newcommand{\p}{^\prime}
+\newcommand{\pp}{^{\prime\prime}}
+\newcommand{\ass}[1]{\left( #1 \right)}
+\newcommand{\set}[1]{\left\{ #1 \right\}}
+
+\newcommand{\Leech}{\Lambda_{24}}
+\newcommand{\Golay}{\mathcal{C}_{24}}
+
+\newcommand{\header}[1]{\vspace{1em}\noindent\textsc{#1.} }
+
+\newcommand{\definition}[1]{\vspace{1em}\noindent\textbf{Definition #1.} }
+\newcommand{\theorem}[1]{\vspace{1em}\noindent\textbf{Theorem #1.} }
+
+\begin{document}
+
+\begin{center}
+  {\huge\sc QR Codes}
+  \\[2em]
+  {\Large --- Outline ---}
+  \\[2em]
+  {\large Henry Blanchette}
+\end{center}
+
+\vspace{4em}
+
+\tableofcontents
+\newpage
+
+% ----------------------------------------------------------------------------------------------------------------------------
+\section{Introduction}
+
+% ----------------------------------------------------------------------------------------------------------------------------
+\subsection{The Coding Problem}
+Consider the scenario where a person, Alex, wants to send a message another person, Beth, via a noisy electrical channel.
+To facilitate such a transmission, a few pieces of equipment and processes are involved.
+First, Alex comes up with the message that he would like to transmit and writes it down in the form of an $m$-tuple,
+$$ \vec a = (a_m, \dots, a_m). $$
+Then, Alex uses a machine called a \textbf{encoder} that maps $\vec a$ to an $n$-tuple,
+$$ \vec x = (x_1, \dots, x_n). $$
+$\vec x$ is a \textbf{codeword} - one of some number of possible codewords in the encoder's image.
+Note that there must be at least as many codewords as there are possible original messages.
+
+Next, $x$ is transmitted to Beth as an electrical signal along a channel.
+During the transmission, some random noise $\vec e$ is added to the signal, where $\vec e$ is a $n$-tuple.
+The resulting signal that Beth recieves is $\vec r := \vec x + \vec e$.
+
+In an attempt to correctly recover $\vec a$ from $\vec r$, Beth uses a machine called an \textbf{decoder}.
+The decoder calculates the most likely codeword $\vec x\p$ that could have resulted in $\vec r$,
+and then outputs the message $\vec a\p$ that corresponds to $\vec x\p$ via inverse-encoding.
+If $\vec r$ is exactly a codeword, then $\vec x\p = \vec r$.
+However, if $\vec r$ is not exactly a codeword, then the decoder finds the \textit{closest} codeword to $\vec r$ in the space of the encoder's codomain (recall that are a subset of this codomain, the encoder's image).
+
+The \textbf{coding problem} is the problem of devising an encoder/decoder pair that efficiently (in regards to some set of concerned features) and accurately faciliates transmissions like the one above. A construction of codewords of length $n$ is referred to as a \textbf{code}, $C$.
+
+\subsection{Transmission Specifications}
+\label{sec:trans-spec}
+
+There is one possible ``solution'' to the coding problem that illustrates why specifying some more bounds on the transmission process is useful.
+Say there is a similar setup to the one in the previous section, and Alex wants to send Beth information about his coin-tossing prowess.
+After each toss, Alex sends the result to Beth in the form of a 0 for heads and 1 for tails.
+Alex tosses his coin at a speed of $t$ tosses per minute.
+The channel connecting Alex and Beth is noisy such that there is a chance $p$ that a bit is sent incorrectly, and a chance $q := 1-p$  that bit is sent correctly.
+This channel is called a \textbf{binary symmetric channel}.
+Also, this channel only allows Alex to send $2t$ bits per minute and only during his coin-tossing session.
+When Alex gets a heads he transmits 0, and when he gets a tails he transmits 1.
+Alex decides to carry out his session for $T$ minutes.
+At the end of the $T$ minutes, Beth looks at the bits she received.
+She knows that a fraction $p$ of them are incorrect, because of the channel's error rate. How could she reduce her decoding error lower than $p$?
+
+Consider setup differing only in one aspect: there is no time constraint.
+Then instead of just sending one 0 or 1 for each toss, Alex can send $N$ 0s or 1s for each toss.
+Then, Alice's decoder can decodes each section of $N$ bits by taking the most common bit.
+Using this method, the probability of decoder error is
+\begin{align}
+  P_e(N) := \sum_{0 \leq k \leq N/2} \binom{N}{k} q^k p^{N-k}.
+\end{align}
+Furthermore,
+$$ \lim_{N \ra \infty} P_e(N) \ra 0 $$
+% TODO: proof
+so Alex and Beth can achieve arbitrarily accurate communication given enough time.
+The time constraint was an important obstacle after all!
+
+% ----------------------------------------------------------------------------------------------------------------------------
+% ----------------------------------------------------------------------------------------------------------------------------
+\section{Shannon's Theorem}
+
+The obviously unsatisfying aspect of the ``solution'' in section \ref{sec:trans-spec}, other than the ignorance of a time constraint, is that it is extremely wasteful. There should have to be a good excuse for having to send a message any more than once.
+In turns out that, in fact, there are much better ways of achieving accuracy even within time and other constraints.
+Shannon's theorem states that, in the same situation as originally described in \ref{sec:trans-spec}, Alex and Beth can still achieve arbitrarily small error probability.
+
+\definition{2.0.1}
+Let $C$ be a code with codewords of length $n$. Then the \textbf{information rate} of the code is
+$$ R := n\i \log_2 |C|. $$
+
+\definition{2.0.2}
+Let $\vec x, \vec y \in \F_2^n$. Then their \textbf{Hamming distance} is
+$$ d(\vec x, \vec y) := |\set{ i : x_i \neq y_i }| $$
+
+Suppose we have a binary symmetric channel with transmission-error probability $p$, and $q := 1 - p$.
+Let $C = \set{ \vec x_i }$ be a code of $M$ words of length $n$, where each of the words are encoded to with equal probability.
+Suppose the decoder uses \textbf{maximum-likelihood} decoding i.e. the decoder decodes a recieved signal to the codeword that was most likely to be the original signal.
+Let $P_i$ be the probability that the decoder is incorrect given that $\vec x_i$ is transmitted.
+So, the probability of an incorrect decoding is
+\begin{align}
+  P_C := M\i \sum_{i=1}^M P_i
+\end{align}
+Finally, define
+\begin{align}
+  P^*(M, n, p) := \min{ P_C : C \tt{is a code with $M$ words of length $n$} }
+\end{align}
+
+\theorem{2.0.1}
+(Shannon's theorem)
+
+
+
+
+% ----------------------------------------------------------------------------------------------------------------------------
+% ----------------------------------------------------------------------------------------------------------------------------
+\section{Linear Codes}
+
+% ----------------------------------------------------------------------------------------------------------------------------
+\subsection{Linear Codes}
+
+% ----------------------------------------------------------------------------------------------------------------------------
+\subsection{Hamming Codes}
+
+% ----------------------------------------------------------------------------------------------------------------------------
+\subsection{Weight Enumerators}
+
+% ----------------------------------------------------------------------------------------------------------------------------
+% ----------------------------------------------------------------------------------------------------------------------------
+\section{The Binary Golay Code}
+
+% ----------------------------------------------------------------------------------------------------------------------------
+\subsection{Hadamard Codes}
+
+% ----------------------------------------------------------------------------------------------------------------------------
+\subsection{The Binary Golay Code}
+
+% ----------------------------------------------------------------------------------------------------------------------------
+% ----------------------------------------------------------------------------------------------------------------------------
+\section{Cyclic Codes}
+
+% ----------------------------------------------------------------------------------------------------------------------------
+\subsection{Definitions}
+
+% ----------------------------------------------------------------------------------------------------------------------------
+\subsection{Generator Matrix and Check Polynomial}
+
+% ----------------------------------------------------------------------------------------------------------------------------
+\subsection{Zeros of a Cyclic Code}
+
+% ----------------------------------------------------------------------------------------------------------------------------
+\subsection{Idempotent of a Cyclic Code}
+
+% ----------------------------------------------------------------------------------------------------------------------------
+\subsection{Alternative Representations of Cyclic Codes}
+% TODO: cover this if necessary for QR codes section
+
+% ----------------------------------------------------------------------------------------------------------------------------
+\subsection{Quadratic Residue (QR) Codes}
+
+
+\end{document}
