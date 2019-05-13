@@ -12,7 +12,7 @@
 \contentsline {section}{\numberline {5}Cyclic Codes}{7}% 
 \contentsline {subsection}{\numberline {5.1}Definitions}{7}% 
 \contentsline {subsection}{\numberline {5.2}Generator Matrix and Check Polynomial}{8}% 
-\contentsline {subsection}{\numberline {5.3}Zeros of a Cyclic Code}{8}% 
+\contentsline {subsection}{\numberline {5.3}Zeros of a Cyclic Code}{9}% 
 \contentsline {subsection}{\numberline {5.4}Idempotent of a Cyclic Code}{9}% 
-\contentsline {subsection}{\numberline {5.5}Alternative Representations of Cyclic Codes}{9}% 
-\contentsline {subsection}{\numberline {5.6}Quadratic Residue\IeC {\nobreakspace }(QR) Codes}{9}% 
+\contentsline {subsection}{\numberline {5.5}Alternative Representations of Cyclic Codes}{10}% 
+\contentsline {subsection}{\numberline {5.6}Quadratic Residue\IeC {\nobreakspace }(QR) Codes}{10}% 
