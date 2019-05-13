@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.20 (TeX Live 2019) (preloaded format=pdflatex 2019.5.9)  12 MAY 2019 20:52
+This is pdfTeX, Version 3.14159265-2.6-1.40.20 (TeX Live 2019) (preloaded format=pdflatex 2019.5.9)  12 MAY 2019 21:27
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -329,35 +329,36 @@ File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 ]
 [3] [4] [5] [6] [7] [8] [9] [10] (./final-outline.aux) ) 
 Here is how much of TeX's memory you used:
- 3501 strings out of 494060
- 50080 string characters out of 6163036
- 130265 words of memory out of 5000000
- 7149 multiletter control sequences out of 15000+600000
- 8501 words of font info for 32 fonts, out of 8000000 for 9000
+ 3508 strings out of 494060
+ 50164 string characters out of 6163036
+ 128303 words of memory out of 5000000
+ 7154 multiletter control sequences out of 15000+600000
+ 9120 words of font info for 34 fonts, out of 8000000 for 9000
  319 hyphenation exceptions out of 8191
  41i,16n,32p,318b,255s stack positions out of 5000i,500n,10000p,200000b,80000s
 </usr/local/texlive/201
 9basic/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb></usr/local/texlive
 /2019basic/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></usr/local/tex
-live/2019basic/texmf-dist/fonts/type1/public/amsfonts/cm/cmcsc10.pfb></usr/loca
-l/texlive/2019basic/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/
-local/texlive/2019basic/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></
-usr/local/texlive/2019basic/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi5.pfb
-></usr/local/texlive/2019basic/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi7.
-pfb></usr/local/texlive/2019basic/texmf-dist/fonts/type1/public/amsfonts/cm/cmr
-10.pfb></usr/local/texlive/2019basic/texmf-dist/fonts/type1/public/amsfonts/cm/
-cmr12.pfb></usr/local/texlive/2019basic/texmf-dist/fonts/type1/public/amsfonts/
-cm/cmr5.pfb></usr/local/texlive/2019basic/texmf-dist/fonts/type1/public/amsfont
-s/cm/cmr7.pfb></usr/local/texlive/2019basic/texmf-dist/fonts/type1/public/amsfo
-nts/cm/cmsy10.pfb></usr/local/texlive/2019basic/texmf-dist/fonts/type1/public/a
-msfonts/cm/cmsy7.pfb></usr/local/texlive/2019basic/texmf-dist/fonts/type1/publi
-c/amsfonts/cm/cmti10.pfb></usr/local/texlive/2019basic/texmf-dist/fonts/type1/p
-ublic/amsfonts/symbols/msbm10.pfb></usr/local/texlive/2019basic/texmf-dist/font
-s/type1/public/amsfonts/symbols/msbm7.pfb>
-Output written on final-outline.pdf (10 pages, 216751 bytes).
+live/2019basic/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx7.pfb></usr/local/
+texlive/2019basic/texmf-dist/fonts/type1/public/amsfonts/cm/cmcsc10.pfb></usr/l
+ocal/texlive/2019basic/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></u
+sr/local/texlive/2019basic/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb
+></usr/local/texlive/2019basic/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi5.
+pfb></usr/local/texlive/2019basic/texmf-dist/fonts/type1/public/amsfonts/cm/cmm
+i7.pfb></usr/local/texlive/2019basic/texmf-dist/fonts/type1/public/amsfonts/cm/
+cmr10.pfb></usr/local/texlive/2019basic/texmf-dist/fonts/type1/public/amsfonts/
+cm/cmr12.pfb></usr/local/texlive/2019basic/texmf-dist/fonts/type1/public/amsfon
+ts/cm/cmr5.pfb></usr/local/texlive/2019basic/texmf-dist/fonts/type1/public/amsf
+onts/cm/cmr7.pfb></usr/local/texlive/2019basic/texmf-dist/fonts/type1/public/am
+sfonts/cm/cmsy10.pfb></usr/local/texlive/2019basic/texmf-dist/fonts/type1/publi
+c/amsfonts/cm/cmsy7.pfb></usr/local/texlive/2019basic/texmf-dist/fonts/type1/pu
+blic/amsfonts/cm/cmti10.pfb></usr/local/texlive/2019basic/texmf-dist/fonts/type
+1/public/amsfonts/symbols/msbm10.pfb></usr/local/texlive/2019basic/texmf-dist/f
+onts/type1/public/amsfonts/symbols/msbm7.pfb>
+Output written on final-outline.pdf (10 pages, 227691 bytes).
 PDF statistics:
- 101 PDF objects out of 1000 (max. 8388607)
- 72 compressed objects within 1 object stream
+ 105 PDF objects out of 1000 (max. 8388607)
+ 75 compressed objects within 1 object stream
  0 named destinations out of 1000 (max. 500000)
  1 words of extra memory for PDF output out of 10000 (max. 10000000)
 
