@@ -15,7 +15,15 @@
 \newcommand{\Z}{\mathbb{Z}}
 \newcommand{\R}{\mathbb{R}}
 \newcommand{\F}{\mathbb{F}}
+\newcommand{\E}{\mathcal{E}}
+\newcommand{\calR}{\mathcal{R}}
 
+\renewcommand{\mod}{\text{ mod }}
+\newcommand{\dual}[1]{#1^\bot}
+\newcommand{\trans}[1]{#1^\top}
+\newcommand{\ext}[1]{\overline{#1}}
+\newcommand{\mt}{\mapsto}
+\newcommand{\floor}[1]{\left\lfloor #1 \right\rfloor}
 \renewcommand{\=}{\equiv}
 \newcommand{\erfc}{\text{erfc}}
 \renewcommand{\i}{^{-1}}
@@ -25,11 +33,25 @@
 \newcommand{\pp}{^{\prime\prime}}
 \newcommand{\ass}[1]{\left( #1 \right)}
 \newcommand{\set}[1]{\left\{ #1 \right\}}
+\renewcommand{\v}{\mathbf}
+\newcommand{\x}{{\v x}}
+\newcommand{\y}{{\v y}}
 
 \newcommand{\Leech}{\Lambda_{24}}
 \newcommand{\Golay}{\mathcal{C}_{24}}
 
 \newcommand{\header}[1]{\vspace{1em}\noindent\textsc{#1.} }
+
+\theoremstyle{plain}
+\newtheorem{thm}{Theorem}[subsection]
+\newtheorem{lem}{Lemma}[subsection]
+\newtheorem*{cor}{Corollary}
+
+\theoremstyle{definition}
+\newtheorem{defn}{Definition}[subsection]
+\newtheorem{exmp}{Example}[subsection]
+
+\newcommand{\TODO}[1]{(TODO: #1)}
 
 \begin{document}
 
@@ -41,8 +63,659 @@
 
 \vspace{4em}
 
+\newpage
+\tableofcontents
+
+\newpage
+
 % ----------------------------------------------------------------------------------------------------------------------------
+\setcounter{section}{-1}
+\section{Preface}
+% TODO: write preface
+% - goals for final
+% - what interested me
+% - goals I did not achieve
+% - goal I achieved
+% - what I got out of it
+
 % ----------------------------------------------------------------------------------------------------------------------------
 \section{Introduction}
+
+% ----------------------------------------------------------------------------------------------------------------------------
+\subsection{The Coding Problem}
+Consider the scenario where a person, Alex, wants to send a message another person, Beth, via a noisy electrical channel.
+To facilitate such a transmission, a few pieces of equipment and processes are involved.
+First, Alex comes up with the message that he would like to transmit and writes it down in the form of an $m$-tuple,
+$$ \v a = (a_m, \dots, a_m). $$
+Then, Alex uses a machine called a \textbf{encoder} that maps $\v a$ to an $n$-tuple,
+$$ \x = (x_1, \dots, x_n). $$
+$\x$ is a \textbf{codeword} - one of some number of possible codewords in the encoder's image.
+Note that there must be at least as many codewords as there are possible original messages.
+
+Next, $x$ is transmitted to Beth as an electrical signal along a channel.
+During the transmission, some random noise $\v e$ is added to the signal, where $\v e$ is a $n$-tuple.
+The resulting signal that Beth recieves is $\v r := \x + \v e$.
+
+In an attempt to correctly recover $\v a$ from $\v r$, Beth uses a machine called an \textbf{decoder}.
+The decoder calculates the most likely codeword $\x\p$ that could have resulted in $\v r$,
+and then outputs the message $\v a\p$ that corresponds to $\x\p$ via inverse-encoding.
+If $\v r$ is exactly a codeword, then $\x\p = \v r$.
+However, if $\v r$ is not exactly a codeword, then the decoder finds the \textit{closest} codeword to $\v r$ in the space of the encoder's codomain (recall that are a subset of this codomain, the encoder's image).
+
+The \textbf{coding problem} is the problem of devising an encoder/decoder pair that efficiently (in regards to some set of concerned features) and accurately faciliates transmissions like the one above. A construction of codewords of length $n$ is referred to as a \textbf{code}, $C$.
+
+\subsection{Transmission Specifications}
+\label{sec:trans-spec}
+
+There is one possible ``solution'' to the coding problem that illustrates why specifying some more bounds on the transmission process is useful.
+Say there is a similar setup to the one in the previous section, and Alex wants to send Beth information about his coin-tossing prowess.
+After each toss, Alex sends the result to Beth in the form of a 0 for heads and 1 for tails.
+Alex tosses his coin at a speed of $t$ tosses per minute.
+The channel connecting Alex and Beth is noisy such that there is a chance $p$ that a bit is sent incorrectly, and a chance $q := 1-p$  that bit is sent correctly.
+This channel is called a \textbf{binary symmetric channel}.
+Also, this channel only allows Alex to send $2t$ bits per minute and only during his coin-tossing session.
+When Alex gets a heads he transmits 0, and when he gets a tails he transmits 1.
+Alex decides to carry out his session for $T$ minutes.
+At the end of the $T$ minutes, Beth looks at the bits she received.
+She knows that a fraction $p$ of them are incorrect, because of the channel's error rate. How could she reduce her decoding error lower than $p$?
+
+Consider setup differing only in one aspect: there is no time constraint.
+Then instead of just sending one 0 or 1 for each toss, Alex can send $N$ 0s or 1s for each toss.
+Then, Alice's decoder can decodes each section of $N$ bits by taking the most common bit.
+Using this method, the probability of decoder error is
+\begin{align}
+  P_e(N) := \sum_{0 \leq k \leq N/2} \binom{N}{k} q^k p^{N-k}.
+\end{align}
+Furthermore,
+$$ \lim_{N \ra \infty} P_e(N) = 0 $$
+% TODO: proof
+so Alex and Beth can achieve arbitrarily accurate communication given enough time.
+The time constraint was an important obstacle after all!
+
+% ----------------------------------------------------------------------------------------------------------------------------
+% ----------------------------------------------------------------------------------------------------------------------------
+\section{Shannon's Theorem}
+
+The obviously unsatisfying aspect of the ``solution'' in section~\ref{sec:trans-spec}, other than the ignorance of a time constraint, is that it is extremely wasteful. There should have to be a good excuse for having to send a message any more than once.
+In turns out that, in fact, there are much better ways of achieving accuracy even within time and other constraints.
+Shannon's theorem states that, in the same situation as originally described in \ref{sec:trans-spec}, Alex and Beth can still achieve arbitrarily small error probability.
+
+\begin{defn} \label{eq:defR}
+Let $C$ be a code with codewords of length $n$. Then the \textbf{information rate} of the code is
+$$ R := n\i \log_2 |C|. $$
+\end{defn}
+
+\begin{defn}
+Let $\x, \y \in \F_2^n$. Then their \textbf{Hamming distance} is
+$$ d(\x, \y) := |\set{ i : x_i \neq y_i }| $$
+
+Suppose we have a binary symmetric channel with transmission-error probability $p$, and $q := 1 - p$.
+Let $C = \set{ \x_i }$ be a code of $M$ words of length $n$, where each of the words are encoded to with equal probability.
+Suppose the decoder uses \textbf{maximum-likelihood} decoding i.e. the decoder decodes a received signal to the codeword that was most likely to be the original signal.
+Let $P_i$ be the probability that the decoder is incorrect given that $\x_i$ is transmitted.
+So, the probability of an incorrect decoding is
+\begin{align}
+  P_C := M\i \sum_{i=1}^M P_i
+\end{align}
+Finally, define
+\begin{align}
+  P^*(M, n, p) := \min\set{ P_C : C \tt{is a code with $M$ words of length $n$} }
+\end{align}
+\end{defn}
+
+\begin{thm}
+  (Shannon's theorem)
+  $$
+  0 < R < 1 + p \log p + q \log q
+  \implies \lim_{n \ra \infty} P^*(M_n, n, p) = 0
+  $$
+  where $M_n := 2^{[Rn]}$ and all logarithms have base 2.
+\end{thm}
+
+\begin{proof}
+Observe that the probability of an error pattern with $w$ errors is $p^w q^{-w}$, which depends only on $w$.
+Denote the probability of receiving $\y$ given that $\x$ is transmitted by $P(y|x)$.
+Then also note that $P(\y|\x) = P(\x|\y)$.
+
+The number of errors in a received word is a random variable with expected value $np$ and variance $np(1-p) = npq$.
+Let $\epsilon > 0$ and
+$$ b := \ass{\frac{np(1-p)}{\epsilon/2}}^{1/2}. $$
+Then by Chebyshev's inequality \TODO{cite 1.4.1}, we have
+\begin{equation} \label{eq:cheby}
+  P(w > np + b) \leq \frac{\epsilon}{2}
+\end{equation}
+Let $\rho := \floor{np + b}$.
+Then since $p < \frac 1 2$, $\rho$ is less than $\frac{n}{2}$ when $n$ is sufficiently large \TODO{show this}.
+Define
+\begin{align}
+  B_\rho(\x) := \set{ \y : d(\x, \y) \leq \rho }
+\end{align}
+which is the ball of radius $\rho$ around $\v x$.
+Then \TODO{cite Lemma 1.4.3} yields that
+\begin{align}
+  |B_\rho(\x)| = \sum_{i \leq \rho} \binom{n}{i} < \frac{1}{2} \binom{n}{\rho} \leq \frac{n}{2} \frac{n^2}{\rho^\rho(n - \rho)^{n - \rho}}
+\end{align}
+
+We will use the following estimates:
+\begin{align} \label{eq:estimates}
+  \frac{\rho}{n} \log \frac{\rho}{n} = \frac{1}{n} \floor{np + b} \log \frac{\floor{np + b}}{n}
+  &= p \log p + O(n^{-1/2}) \\
+  \lim_{n \ra \infty} \ass{\ass{1 - \frac{\rho}{n}} \log \ass{1 - \frac{\rho}{n}}}
+  &= q \log q + O(n^{-1/2})
+\end{align}
+
+Define
+\begin{align}
+  f :
+  \F_2^n \times \F_2^n &\ra \F_2 \\
+  (\v u, \v v) &\mt \begin{cases}
+    0 &\tt{if} d(\v u, \v v) > \rho \\
+    1 &\tt{if} d(\v u, \v v) \leq \rho
+  \end{cases}
+\end{align}
+
+For $\x_i \in C$ and $\y \in \F_2^n$, define
+\begin{align*}
+  g_i :
+  \F_2^n &\ra \Z \\
+  \y &\mt 1 - f(\y, \x_i) + \sum_{j \neq i} f(\v y, \x_j)
+\end{align*}
+$g_i$ is a function that counts the number of codewords other than $\x_i$ such that $d(\x_i, \y) \leq \rho$.
+
+Now, choose $M$ codewords $\x_1, \dots, \x_M$ at random independently.
+Then the decoding algorithm is as follows.
+Suppose the decoder receives $\y$.
+If there is exactly one codeword $\x_i$ such that $d(\x_i, \y) \leq \rho$, i.e. $!\exists i : g_i(\y) = 0$, then decode $\y$ as $\x_i$.
+If there is not such $\x_i$, then the decoder has detected an error, and if it must decode anyway it outputs $\x_1$ as a default.
+
+So $P_i$, the probability of error (as decidedd by the decoder algorithm), is such that
+$$
+  P_i
+  \leq \sum_{\y \in \F_2^n} P(\y|\x_i) g_i(\y)
+  = \sum_{\y} P(\y|\x_i)(1 - f(\y, \x_i)) + \sum_{\y} \sum_{j \neq i} P(\y|\x_j) f(\y, \x_j)
+$$
+where the right term is the probability that the received word $\y$ is not in $B_\rho(\x_i)$.
+By equation~\ref{eq:cheby}, $P_i \leq \frac{\epsilon}{2}$.
+Then,
+$$ P_C \leq \frac{\epsilon}{2} + M\i \sum_{i = 1}^M \sum_{\y} \sum_{j \neq i} P(\y|\x_i) f(\y, \x_j). $$
+Since $\x_1, \dots, \x_M$ were chosen at random, we have
+\begin{align*}
+  P^*(M, n, p)
+  &\leq \frac{\epsilon}{2} + M\i \sum_{i = 1}^M \sum_{\y} \sum_{j \neq i} \E(P(\y|\x_i)) \E(f(\y, \x_j)) \\
+  &= \frac{\epsilon}{2} + M\i \sum_{i = 1}^M \sum_{\y} \sum_{j \neq i} \E(P(\y|\x_i)) \cdot \frac{|B_\rho|}{2^n} \\
+  &= \frac{\epsilon}{2} + (M - 1)2^{-n} |B_\rho|.
+\end{align*}
+Next, applying the estimates \ref{eq:estimates}, we have
+$$ P^*(M, n, p) \leq n\i \log(P^*(M,n,p) - \frac{\epsilon}{2}) \leq n\i \log_M - (1 + p \log p + q \log q) + O(\sqrt{n}) $$
+where $O(\sqrt{n})$ is a polynomial that is asymptotically equivalent to $\sqrt{n}$.
+Lastly we can substitute $M_n$ for $M$, allowing the number of words, $M$ in the code to depend on $n$, and use the restriction on $R$, $0 < R < 1 + p \log p + q \log q$, to get
+$$ n\i \log(P^*(M_n, n, p) - \frac{\epsilon}{2}) < - \beta < 0 $$
+from the definition of $R$ (definition~\ref{eq:defR}), for $$n > N := \frac{-\log\frac{\epsilon}{2}}{\beta}.$$
+In other words,
+\begin{align*}
+  P^*(M_n, n, p) < \frac{\epsilon}{2} + 2^{-\beta n}.
+\end{align*}
+Thus
+\begin{align*}
+  P^*(M_n, n, p)
+  < \frac{\epsilon}{2} + 2^{-\beta n}
+  < \frac{\epsilon}{2} + \frac{\epsilon}{2}
+  = \epsilon.
+\end{align*}
+\end{proof}
+
+This result was first published in C.E. Shannon's paper \textit{Mathematical theory of communication} (1948), and is popularly recognized as origin of coding theory.
+The key concept that the theory illustrates is that \textbf{good codes} exist, where a good code is a code both usefully accurate yet more efficient than the unenightening code presented in section~\ref{sec:trans-spec}.
+
+% TODO: do example of Shannon's theorem that is shown before the proof
+
+% ----------------------------------------------------------------------------------------------------------------------------
+% ----------------------------------------------------------------------------------------------------------------------------
+\section{Linear Codes}
+
+Linear codes are the first step towards designing codes that have some algebraic structure.
+The symbols that a code uses are referred to as its \textbf{alphabet}. As shown in the previous section, binary codes have the alphabet $\F_2$, their name-sake.
+If the alphabet is taken to be some group $Q$, the the code is called a \textbf{group code}.
+For this section, we will use the $\F_q$ as the group for our group code, where $q = p^r$ for some prime $p$ and some positive integer $r$.
+Then $Q^n$ is is an $n$-dimensional vector space; denote $Q^n$ by $\calR^n$ or just $\calR$.
+From here on, a \textbf{code} shall be defined to be a proper subset of $\calR$.
+
+\begin{defn}
+The \textbf{minimum distance} of a nontrivial code $C$ is
+$$ \min\set{ d(\x, \y) : \x,\y \in C, \x \neq \y } $$
+\end{defn}
+
+\begin{defn}
+The \textbf{information rate} (or just \textbf{rate}) of a code $C$ is
+$$ R := n\i \log_q |C| $$
+\end{defn}
+
+% ----------------------------------------------------------------------------------------------------------------------------
+\subsection{Linear Codes}
+
+\begin{defn}
+A \textbf{linear code} $C$ is a linear subspace of $\calR$.
+Let $k$ be the dimension of $C$.
+Then $C$ is called an $[n,k]$ code.
+If $C$ has a minimum distance between codewords, call it $d$.
+Then $C$ is called an $[n,k,d]$ code.
+\end{defn}
+
+\begin{defn}
+A \textbf{generator matrix} $G$ for a linear $[n,k]$ code $C$ is a $k \times n$ matrix for which the rows are a basis of $C$.
+Observe that $C = \set{ \v a G : \v a \in \calR }$.
+$G$ is in \textbf{standard form} (row-echelon form) if $G = (I \; P)$ where $I$ is the $k \times k$ identity matrix.
+If $G$ is in standard form, then the first $k$ symbols of a codeword of $C$ are called the \textbf{information symbols}, and the remaining symbols of the codeword are called the \textbf{parity check symbols}.
+\end{defn}
+
+\begin{defn}
+Let $C$ be an $[n,k]$ code. Then $C$'s \textbf{dual code}, $\dual C$, is defined as
+$$ \dual C := \set{ \y \in \calR^n : \forall x \in C, \x \cdot \y = 0 }. $$
+Note that $\dual C$ is an $[n, n-k]$ code.
+If $\y \in C$, then $\forall x \in C : \x \cdot \y = 0$. The previous equation is called the \textbf{parity check equation} for $C$.
+Let $G = (I_k \; P)$ be the standard-formed generator matrix for $C$.
+Consider $H := (-\trans P \; I_{n-k})$
+Since $G \trans H = 0$ \TODO{calculate this}, every codeword $\v a G$ has an inner product of 0 with each row of $H$, i.e.
+\begin{equation}
+  \label{eq:syndrome-0}
+  \forall \x \in C : \x \trans H = \v 0,
+\end{equation}
+which corresponds to a system of $n-k$ linear equations.
+In this way, $H$ is a generator matrix for $\dual C$.
+$H$ is called the \textbf{parity check matrix} for $C$.
+\end{defn}
+
+\begin{defn}
+Let $C$ be a linear code with parity check matrix $H$.
+Then for each $\v x \in \calR$, call $\x \trans H$ the \textbf{syndrome} of $\x$.
+Equation~\ref{eq:syndrome-0} demonstrated that $C$'s codewords are characterized by the syndrome of $\v 0$.
+
+$C$ is a subgroup of $\calR$ \TODO{prove this, from section 2.1}.
+So we can partition $\calR$ into cosets of $C$.
+For $\x, \y \in \calR$ are in the same coset if and only if they have the same syndrome, i.e.
+$$ \x \trans H = \y \trans H \iff \x - \y \in C. $$
+Therefor, if $\v r = \x + \v e$ is recieved by the decoder, where $\x$ is the original signal that the decoder \textit{should} decode to and $\v e$ is the added noise, then $\v r$ and $\v e$ have the same syndrome.
+In the maximum-likelihood decoding of $\v r$, the decoder chooses an $\v e$ of minimal weight such that $\v e$ is in the same coset of $\x$, and then decodes $\v r$ as $\v r - e = \v x$.
+\end{defn}
+
+\begin{defn}
+Let $C$ be a code of length $n$ over the alphabet $\F_q$.
+Then the \textbf{extended code} $\ext{C}$ is defined as
+$$ \ext{C} := \set{ (c_1, \dots, c_n, c_{n+1}) : (c_1, \dots, c_n) \in C \land \sum_{i=1}^{n+1} c_i = 0 }. $$
+Let $G$ be a generator and $H$ be a parity check matrix for $C$.
+Then construct $\ext{G}$ by appending a column to $G$ such that the sum of the columns of $\ext{G}$ is zero, making $\ext{G}$ indeed the parity check matrix for $\ext{C}$.
+Also construct $\ext{H}$ by
+\begin{equation}
+  \ext{H} := \begin{pmatrix}
+    1 & 1 & 1 & \cdots & 1 \\
+      &   &   &       & 0 \\
+      &   & H &       & 0 \\
+      &   &   &       & \vdots \\
+      &   &   &       & 0 \\
+  \end{pmatrix}
+\end{equation}
+Note that in the case that $C$ is a binary code with odd minimum distance $d$, then $\ext{C}$ has minimum distance $d + 1$ since the weights and distances for $\ext{C}$ must be even.
+\TODO{calcultate this}
+\end{defn}
+
+% ----------------------------------------------------------------------------------------------------------------------------
+\subsection{Hamming Codes}
+
+Let $G$ be the $k \times n$ generator matrix of an $[n,k]$ code $C$ over $\F_q$.
+If any two columns of $G$ are linearly independent (i.e. the columns when interpreted as vectors represent distinct points in $PG(k-1, q)$), then $C$ is called a \textbf{projective code}.
+$\dual C$ has $G$ as its parity matrix.
+For $\v c \in \dual C$, if $\v e$ is an error vector of weight 1, then the syndrome of $(\v c + \v e) \trans G$ is a multiple of a column of $G$.
+In this way, $\v c + \v e$ uniquely determines one column of $G$, and so $\dual C$ is a code that corrects at least one error.
+
+\begin{defn}
+Let $n := (q^k - 1)/(q - 1)$.
+The $[n, n-k]$ \textbf{Hamming code} over $\F_q$ is a code for which the parity chekc matrix has columns which are pairwise linearly independent over $\F_q$ (i.e the columns are a maximal set of pairwise linearly independent vectors).
+The minimum distance of a Hamming code is 3. \TODO{prove why}
+\end{defn}
+
+\begin{exmp}
+The $[7,4]$ binary Hamming code $C$ has parity check matrix
+$$ H = \begin{pmatrix}
+  0 & 0 & 0 & 1 & 1 & 1 & 1 \\
+  0 & 1 & 1 & 0 & 0 & 1 & 1 \\
+  1 & 0 & 1 & 0 & 1 & 0 & 1
+\end{pmatrix} $$
+\TODO{what to say about this, example 3.3.3}
+\end{exmp}
+
+
+% ----------------------------------------------------------------------------------------------------------------------------
+\subsection{Weight Enumerators}
+
+% ----------------------------------------------------------------------------------------------------------------------------
+% ----------------------------------------------------------------------------------------------------------------------------
+\section{The Binary Golay Code}
+
+% ----------------------------------------------------------------------------------------------------------------------------
+% \subsection{Hadamard Codes}
+
+% ----------------------------------------------------------------------------------------------------------------------------
+\subsection{The Binary Golay Code}
+
+Consider the $[7,4]$ Hamming code $H$ with the following parity check matrix:
+$$ \begin{pmatrix}
+  1 & 1 & 0 & 0 & 1 & 0 & 1 \\
+  0 & 0 & 1 & 0 & 1 & 1 & 1 \\
+  1 & 0 & 0 & 1 & 0 & 1 & 1
+\end{pmatrix} $$
+$H$ consists of $\v 0$, the seven cyclic shifts of $(1\;1\;0\;1\;0\;0\;0)$, which is just $PG(2,2)$ \TODO{define this or throw out}, and the complements of these 8 words (the complement of a word replaces 0s with 1s and visa versa).
+$\ext{H}$
+Define $H^*$ to be the code obtained by reversing the order of the symbols in the codewords of $H$.
+Consider the extended codes $\ext{H}, \ext{H^*}$, which are $[8,4]$ codes \TODO{calc this}.
+These codes are such that $\ext{H} \cap \ext{H^*} = \set{ \v 0, \v 1 }$, since only these two words are in both codes forwards and backwards. Additionally both codes are self-dual and have minimum distance 4.
+
+Next, define a code $\ext{C}$ with words of length 24 by
+$$ \ext{C} := \set{ (\v a + \x, \v b + \x, \v a + \v b + \x) : \v a,\v b \in \ext{H}, \x \in \ext{H^*} }. $$
+Observe that by letting $\v a, \v b$ range along a basis of $\ext H$ and $\x$ range along a basis of $\ext{H^*}$, $(\v a, 0, \v a), (0, \v b, \v b), (\x, \x, \x)$ form a basis for $\ext{C}$.
+So $\ext{C}$ is a $[24,12]$ code.
+Furthermore, any two basis vectors of $\ext{C}$ are orthogonal and therefor $\ext{C}$ is self-dual as well.
+Since all basis vectors have weight divisible by 4 (\TODO{referenec to hamming codes?}), every word in $\ext{C}$ has weight divisible by 4.
+
+Suppose that some $\v b \in \ext{C}$ has $w(\v c) < 8$.
+Since each of $\x + \v a, \v b + \x, \v a + \v b + \x$ have even weight, one of them must be $\v 0$.
+So, either $\x = \v 0$ or $\x = \v 1$.
+Without loss of generality, suppose $x = 0$.
+Then the vectors become $\v a, \v b, \v a + \v b$, which have weights 0, 4, or 8.
+% TODO: where does \v c come from?????
+Therefor $\v c = \v 0$, and so $\ext{C}$ has minimum distance 8.
+
+Next, construct the code $C$ by removing the last coordinate of every word in $\ext{C}$.
+Then $C$ is a $[23,12]$ code with minimum distance 7, since the last coordinate of each row of the generator matrix for $H$ (which is also of the parity check matrix for $H$ as defined at the beginning of this section) was a $1$.
+The resulting code $C$ is called the \textbf{binary Golay code}.
+% TODO: there is a different construction of this at the end of the QR code section
+
+% ----------------------------------------------------------------------------------------------------------------------------
+% ----------------------------------------------------------------------------------------------------------------------------
+\section{Cyclic Codes}
+
+% ----------------------------------------------------------------------------------------------------------------------------
+\subsection{Definitions}
+
+\begin{defn}
+  A linear code $C$ is called \textbf{cyclic} if
+  $$ (c_0, c_1, \dots, c_{n-1}) \in C \implies (c_{n-1}, c_0, \dots, c_{n-2}) \in C $$
+\end{defn}
+
+An important fact going forward is the following isomorphism between $\F_q^n$ and a group of polynomials.
+The multiples of $x^n - 1$ form a principal ideal in the ring $\F[x]$.
+For the residue class (quotient) ring $\F_q / (x^n - 1)$, the set of polynomials
+$$ \set{ \sum_{i=0}^{n-1} a_i x^i : a_i \in \F_q }. $$
+acts as a set of representatives for the equivalence classes.
+$\F_q^n$ is isomorphic to this quotient ring (with addition as its operation) via
+\begin{equation}
+  \label{eq:Fq-iso}
+  (a_0, \dots, a_{n-1}) \leftrightarrow [a_0 x^0 + \cdots a_{n-1} x^{n-1}]
+\end{equation}
+Additionally, in this polynomial ring, we can make use of polynomial multiplication.
+From now on, a codeword $\v c$ may also be referred to as the polynomial $c(x) \in \F_q[x] / (x^n-1)$ implicitly converting via equation~\ref{eq:Fq-iso}.
+
+\begin{thm}
+  A linear code $C$ is cyclic if and only if $C$ is an ideal in $\F_q[x]/(x^n-1)$.
+\end{thm}
+\begin{proof}\hspace{0em}
+\begin{enumerate}
+\item[]
+$(\implies)$
+Suppose $c(x) = \sum c_i x^i$ is an ideal in $\F_q[x]/(x^n-1)$.
+Then
+$$ x c(x) = \sum_{i=0}^{n-1} c_i x^{i+1} = c_{n-1} x^0 + \sum_{i=1}^{n-1} c_i x^{i} \mt (c_{n-1}, c_0, \dots, c_{n-2}) \in C $$
+and thus $C$ is cyclic.
+
+\item[]
+$(\impliedby)$
+Suppose $C$ is cyclic.
+Then $\forall c(x) \in C, x c(x) \in C$.
+Repeating this, we get $\forall i, x^i c(x) \in C$.
+Then since $C$ is linear, this implies that $\forall a(x), a(x) c(x) \in C$,
+and hence $C$ is an ideal.
+\end{enumerate}
+\end{proof}
+
+\noindent
+From now on, we will only consider cyclic codes of length $n$ over $F_q$ with $(n, q) = (1)$.
+\vspace{1em}
+
+Since $\F_q[x]/(x^n-1)$ is a principal ideal domain (PID), every cyclic code $C$ consists of the multiples of some polynomial $g(x)$, and $g(x)$ is the monic polynomial of least degree in the ring (a \textit{monic} polynomial of degree $d$ is one where the coefficient of $x^d$ is $1$).
+Call $g(x)$ the \textbf{generator polynomial} of the cyclic code $C$.
+Note that $g(x)$ divides $x^n-1$ because if it did not, then $\gcd(g(x), x^n-1)$ would be a polynomial of degree lower than that of $g(x)$.
+
+Let $x^n - 1 = f_1(x) \cdots f_t(x)$ be a factoring into irreducibles.
+Since $(n, q) = (1)$, these factors must be different from each other.
+These irreducibles are all the possible options for generator polynomials of cyclic codes.
+For a chosen factor $f_i(x)$, the generated cyclic code is the set of multiple of $f_i(x)$ mod $x^n - 1$.
+
+\begin{defn}
+  \label{def:cyclic-generator}
+  The cyclic code generated by $f_i(x)$ is called a \textbf{maximally cyclic code} and denoted by $M_i^+$; this is because $f_i(x)$ is a maximal idea in $\F_q[x]/(x^n-1)$.
+  The code generated by $(x^n-1)/f_i(x)$ is called a \textbf{minimal cyclic code} and denoted $M_i^-$.
+\end{defn}
+
+Observe that minimal cyclic codes are also \textit{irredicible} cyclic codes because if there was a divisor $a(x)$ of $(x^n-1)/f_i(x)$, then we would have \TODO{show contradiction}.
+
+% ----------------------------------------------------------------------------------------------------------------------------
+\subsection{Generator Matrix and Check Polynomial}
+\label{sec:gen-mat-and-check-poly}
+
+Let $g(x)$ be the generator polynomial for a cyclic code $C$ with codewords of length $n$.
+If $g(x)$ has degree $n-k$ the then the codewords $g(x), xg(x), \dots, x^{k-1}g(x)$ form a basis for $C$.
+So $C$ is an $[n,k]$ code.
+Writing $g(x)$ as $\sum_{i=0}^{n-k} g_i x^i$, we can construct a generator matrix for $C$ as
+$$ G = \begin{pmatrix}
+  g_0 & g_1 & \cdots & g_{n-k}   & 0       & 0   & \cdots & 0 \\
+  0   & g_0 & \cdots & g_{n-k-1} & g_{n-k} & 0   & \cdots & 0 \\
+  0   & 0   & \cdots &           &         &     & \cdots & 0 \\
+  0   & 0   & \cdots &           & g_0     & g_1 & \cdots & g_{n-k}
+\end{pmatrix} $$
+Using this form, we encode the information symbols of a codeword $(a_0, \cdots, a_{k-1})$ as $\v a G$, which is just the polynomial
+$$ \ass{ \sum_{i=0}^{k-1} a_i x^i } g(x) $$
+
+Recall that $g(x) \mid (x^2 - 1)$.
+So, there exists a polynomial $h(x) = \sum_{i=0}^k h_i x^i$ such that $g(x) h(x) = (x^n - 1)$ (in $\F_q[x]$).
+Then in $\F_q[x]/(x^n-1)$, this yields $g(x) h(x) \= 0$,
+which is equivalent to the system of equations
+$$ \forall i \in \set{0, \dots, n-1}, \sum_{j=0}^{n-k} g_j h_{i-j} = 0. $$
+This yields that the parity check matrix for $C$ is
+$$ \begin{pmatrix}
+0      & 0 & \cdots & 0   & h_k    &       & \cdots & h_1    & h_0 \\
+0      & 0 & \cdots & h_k & \cdots &       & h_1    & h_0    & 0 \\
+\vdots &   &        &     &        &       &        &        & \vdots \\
+h_k    &   & \cdots &     & h_1    & h_0   & 0      & \cdots & 0
+\end{pmatrix} $$
+and correspondingly $h(x)$ is the \textbf{check polynomial} of $C$.
+In this way, the code $C$ is the set of codes $c(x)$ such that $c(x)h(x) = 0$.
+
+Interestingly, the code generated by $h(x)$ is equivalent to the dual of the code code generated by $g(x)$, namely $C$.
+Recall that the dual $\dual C$ is the code obtained by reversing each of the codewords of $C$.
+Nicely this results in the dual of a maximal cyclic code $M_i^+$ as being the minimal cyclic code $M_i^-$.
+
+% ----------------------------------------------------------------------------------------------------------------------------
+\subsection{Zeros of a Cyclic Code}
+
+\begin{thm}
+Let $n := (q^m - 1)/(q - 1)$, $\beta$ be a primitive $n$th root of unity in $\F_q^m$, and $(m, q-1) = (1)$.
+Then the cyclic code
+$$ C := \set{ c(x) : c(\beta) = 0 } $$
+is equivalent to the $[n, n-m]$ Hamming code over $\F_q$.
+\end{thm}
+\begin{proof}
+Note that
+$$ n = (q-1) (q^{m-2} + 2q^{m-3} + \cdots + m - 1) + m. $$
+Then we have that $(n, q-1) = (m, q-1)$.
+Therefor $\beta^{i(q-1)} \neq 1$ for $i = 1, \cdots, n-1$, i.e. $\beta^i \not\in \F_q$.
+This implies that, since the columns in the parity check matrix $H$ are the representations of $\beta^0, \dots, \beta^{n-1}$ vectors in $\F_q^m$, these columns are linearly independent.
+Thus $H$ is the parity check matrix of an $[n, n-m]$ Hamming code.
+\end{proof}
+
+% ----------------------------------------------------------------------------------------------------------------------------
+\subsection{Idempotent of a Cyclic Code}
+
+\begin{thm}
+Let $C$ be a cyclic code.
+Then there is a unique codeword $c(x)$ which is an identity element for $C$.
+\end{thm}
+\begin{proof}
+Let $g(x)$ be the generator polynomial and $h(x)$ be the check polynomial of $C$.
+Recall from section~\ref{sec:gen-mat-and-check-poly} that $g(x) h(x) = (x^n - 1)$.
+Since $x^n - 1$ has no multiple zeros we have $(g(x), h(x)) = (1)$, and per usual we get
+polynomials $a(x), b(x)$ such that
+$$ g(x) a(x) + h(x) b(x) = 1. $$
+Define
+$$ c(x) := a(x) g(x) = 1 - b(x) h(x). $$
+$c(x)$ is a codeword in $C$ because $C$ is generated by $g(x)$.
+Let $p(x) g(x)$ be a codeword in $C$.
+Then
+\begin{align*}
+c(x) p(x) g(x)
+&= p(x) g(x) - b(x) h(x) p(x) g(x) \\
+&\= p(x) g(x) \mod (x^n - 1)
+\end{align*}
+since $b(x) h(x) p(x) g(x) = b(x) p(x) 0 \mod (x^n - 1)$.
+Hence $c(x) p(x) g(x) = p(x) g(x)$ implies that $c(x)$ is an identity element for $C$ and is unique.
+
+
+\end{proof}
+
+
+% ----------------------------------------------------------------------------------------------------------------------------
+% \subsection{Alternative Representations of Cyclic Codes}
+% TODO: cover this if necessary for QR codes section
+
+% ----------------------------------------------------------------------------------------------------------------------------
+\subsection{Quadratic Residue (QR) Codes}
+
+In this section, consider only codes with word length $n > 2$ prime.
+Additionally the alphabet, $\F_q$, of the code must satisfy the following: $q$ is a quadratic residue mod $n$ i.e. $q^{(n-1)/2} \= 1 \mod n$.
+Let $\alpha$ denote a primitive $n$th root of unity in an extension field of $\F_q$. \TODO{what is this?}
+Define
+\begin{align}
+  R_0 &:= \set{ i^2 \mod n : i \in \F_n \land i \neq 0 }, \tt{the quadratic residues in $\F_n$} \\
+  R_1 &:= F_n^* \setminus R_0, \tt{the non-residues in $\F_n$} \\
+  g_0(x) &:= \prod_{r \in R_0} (x - \alpha^r) \\
+  g_1(x) &:= \prod_{r \in R_1} (x - \alpha^r)
+\end{align}
+Since $q$ is a quadratic residues, $q \in R_0$, and thus the polynomials $g_0(x), g_1(x)$ have coefficients in $\F_q$ ($q$ prime implies that $\Z/q\Z$ is a field).
+Furthermore,
+\begin{align}
+  x^n - 1 &= (x-1) g_0(x) g_1(x)
+\end{align}
+\TODO{prove or cite}
+
+\begin{defn}
+  \label{def:qr-code}
+  The cyclic codes of length $n$ over $\F_q$ with generators $g_0(x)$ and $(x-1)g_0(x)$ are both called \textbf{quadratic residue codes} (a.k.a QR codes).
+\end{defn}
+
+In the case of binary codes, the condition that $q$ is a quadratic residue mod $n$ is equivalent to the condition that $n \= \pm 1 \mod 8$.
+Let $\pi_{j}$ be the permutation of the positions of codewords given by $i \mt ij \mod n$.
+$\pi_j$ maps the code with generator $g_0(x)$ into itself if $j \in R_0$ and maps the code with generator $g_1(x)$ into itself if $j \in R_1$.
+\TODO{proof or at least explanation?}
+This shows that all codes with generator $g_0(x)$ are equivalent, and respectively for codes with generator $g_1(x)$.
+
+In the case that $n \= -1 \mod 4$, then $-1 \in R_1$, and the transformation $x \mt x\i$ maps a codeword of the code with generator $g_0(x)$ to into a codeword of the code with generator $g_1(x)$.
+\TODO{significance of this?}
+
+\begin{thm}
+  Let $\v c = c(x)$ be a codeword in the QR code with generator $g_0(x)$ such that $c(1) \neq 0$.
+  Let $d = w(\v c)$.
+  Then
+  \begin{enumerate}
+    \item[(i)] $d^2 \geq n$.
+    \item[(ii)] $d \= -1 \mod 4 \implies d^2 - d + 1 \geq n$.
+    \item[(iii)] $n \= -1 \mod 8 \land q = 2 \implies d \= 3 \mod 4$.
+  \end{enumerate}
+\end{thm}
+
+\begin{proof}
+\hspace{0em}
+\begin{enumerate}
+  \item[(i)]
+  $c(x) \nmid (x-1)$ because $c(1) \neq 0 \implies c(x) \neq (x-1)$ and $(x-1)$ is irreducible.
+  % We can transform $c(x)$ into a polynomial $\hat c(x)$ which is divisible by $g_1(x)$ and still not divisible by $(x-1)$ via the permutation $\pi_j$ for the some $j$ that mimics the transformation $x \mt x\i$ (reversing the order of the coordinates of the codeword).
+  We can transform $c(x)$ into a polynomial $\hat c(x)$ which is divisible by $g_1(x)$ but still not divisible by $(x-1)$
+  via $\pi_j$ for $j$.
+  This implies that $c(x) \hat c(x)$ is a multiple of $\sum_{i=1}^{n-1} x^i$ because \TODO{how exactly?}.
+  Since $w(\v c) = d$, $c(x) \hat c(x)$ has at most $d^2$ nonzero coefficients, and thus $d^2 \leq n$ where $n$ is the length of the codeword.
+
+  \item[(ii)]
+  Let $j = -1$ in the proof for (i). Then $\hat c(x)$ is the reverse of $c(x)$, and they overlap in at most $d$ positions.
+  Thus $c(x) \hat c(x)$ has at most $d^2 - d + 1$ nonzero coefficients. \TODO{how exactly?}
+
+  \item[(iii)]
+  Write $c(x)$ as $\sim_{i=1}^d x^{l_i}$ and $\hat c(x) = \sum_{i=1}^d x^{-l_i}$.
+  Note that for any indices $i,j,k,l$ we have $l_i - l_j = l_k - l_l \implies l_j - l_i = l_l - l_k$.
+  Then the products resulting in $c(x) \hat c(x)$ must cancle, if they do, in batches of fours.
+  Therefor, we further deduce that $n = d^2 - d + 1 - 4a$ for some $a \geq 0$.
+\end{enumerate}
+\end{proof}
+
+\begin{thm}
+  \label{thm:suitable-theta}
+  For a suitable choice of the primitive element $\alpha$ of $\F_q$, the polynomial
+  $$ \theta(x) := \sum_{i \in R_0} x^r $$
+  is the idempotent of the binary QR code with generator $(x-1) g_0(x)$ if $n \= 1 \mod 4$
+  and is the idempotent of the QR code with generator $g_0(x)$ if $n \= -1 \mod 8$.
+\end{thm}
+\begin{proof}
+$\theta$ is an idempotent polynomial \TODO{prove this}.
+Therefor $\set{\theta(\alpha)}^2 = \theta(\alpha)$, and so it must be that $\theta(\alpha) = 0$ or $\theta(\alpha) = 1$.
+In the same way, $\theta(\alpha^i) = \theta(\alpha)$ if $i \in R_0$ and
+$$ \theta(\alpha^i) + \theta(\alpha) = 1 $$
+if $i \in R_1$.
+It is impossible for all possible $\alpha$ to satisfy $\theta(1) = 1$ \TODO{this is supposed ot be easy to realize}, so the suitable choice for $\alpha$ is such that $\theta(\alpha) = 0$.
+This choice yields that $\theta(\alpha^i) = 0$ if $i \in R_0$ and $\theta(\alpha^i) = 1$ if $i \in R_1$.
+So, $\theta(\alpha^0) = (n-1)/2$ \TODO{why exactly?}
+\end{proof}
+
+Now, construct a matrix $C$ (called a circulant) by taking the word $\v \theta$ as the first row and all cyclic shifts of it as the other rows.
+Let $\v c := (0 \; \cdots \; 0)$ if $n \= 1 \mod 8$, or $\v c := (1 \; \cdots \; 1)$ if $n \= -1 \mod 8$.
+Then defined
+\begin{align}
+  G := \begin{pmatrix}
+    1 & 1 & \cdots & 1 \\
+    \trans{\v c} & & C &
+  \end{pmatrix}
+\end{align}
+Theorem \ref{thm:suitable-theta} yields that the rows of $G$ generate the extended binary QR code of length $n+1$.
+Now, number the coordinate places of the codewords of this code with the points of the projective line of order $n$: $\infty, 0, \dots, n-1$.
+The parity check is the first coordinate, the $\infty$th place.
+The projective special linear group $PSL(2,n)$ consists of all transformations $x \mt (ax + b)/(cx + d)$ where $a, b, c, d \in \F_n$ and $ad - bc = 1$.
+This group is generated by the transformations
+\begin{align*}
+  S(x) &:= x + 1 & T(x) &:= -x\i
+\end{align*}
+Considering the usual algebraic treatment of $\infty$, $S$ is a cyclic shift to the right for all positions other than $\infty$ and leaves the $\infty$th invariant.
+So, by definition~\ref{def:qr-code}, $S$ leaves the extended code invariant.
+The effect of $T$ is the mapping of a row of $G$ into a linear combination of at most three rows of $G$ (\TODO{reference citation [42]}).
+Altogether, both of $S,T$ leave the extended QR code invariant.
+This fact proves the following theorem.
+
+\begin{thm}
+\label{thm:qr-auto}
+The automorphism group of the extended binary QR code of length $n+1$ contains $PSL(2,n)$.
+\end{thm}
+
+% TODO: include this? not really going to do the proof
+% \begin{cor}
+% A word of minimum weight in a binary QR code satisfies the conditions of theorem~\ref{thm:qr-auto}.
+% \end{cor}
+% \begin{proof}
+% % TODO: same as 6.6.8
+% \end{proof}
+
+
+\begin{exmp}
+Let $q = 2, n = 7$.
+Then
+$$ x^7 - 1 = (x-1) (x^3 - x + 1) (x^3 + x^2 + 1). $$
+Take the generator as $g_0(x)$.
+By theorem~\ref{thm:suitable-theta}, we must have $x + x^2 + x^4$ as also a generator.
+Thus $g_0(x) = 1 + x + x^3$.
+This code is the (perfect) $[7,4]$ Hamming code. % TODO: reference or summarize 6.3.1
+\end{exmp}
 
 \end{document}
