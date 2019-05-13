@@ -20,7 +20,7 @@
 
 \newcommand{\dual}[1]{#1^\bot}
 \newcommand{\trans}[1]{#1^\top}
-\newcommand{\extended}[1]{\overline{#1}}
+\newcommand{\ext}[1]{\overline{#1}}
 \newcommand{\mt}{\mapsto}
 \newcommand{\floor}[1]{\left\lfloor #1 \right\rfloor}
 \renewcommand{\=}{\equiv}
@@ -41,9 +41,14 @@
 
 \newcommand{\header}[1]{\vspace{1em}\noindent\textsc{#1.} }
 
-\newcommand{\definition}[1]{\vspace{1em}\noindent\textbf{Definition #1.} }
-\newcommand{\theorem}[1]{\vspace{1em}\noindent\textbf{Theorem #1.} }
-\newcommand{\example}[1]{\vspace{1em}\noindent\textbf{Example #1.} }
+\theoremstyle{plain}
+\newtheorem{thm}{Theorem}[subsection]
+\newtheorem{lem}{Lemma}[subsection]
+\newtheorem*{cor}{Corollary}
+
+\theoremstyle{definition}
+\newtheorem{defn}{Definition}[subsection]
+\newtheorem{exmp}{Example}[subsection]
 
 \newcommand{\TODO}[1]{(TODO: #1)}
 
@@ -124,11 +129,12 @@ The obviously unsatisfying aspect of the ``solution'' in section~\ref{sec:trans-
 In turns out that, in fact, there are much better ways of achieving accuracy even within time and other constraints.
 Shannon's theorem states that, in the same situation as originally described in \ref{sec:trans-spec}, Alex and Beth can still achieve arbitrarily small error probability.
 
-\definition{2.0.1} \label{eq:defR}
+\begin{defn} \label{eq:defR}
 Let $C$ be a code with codewords of length $n$. Then the \textbf{information rate} of the code is
 $$ R := n\i \log_2 |C|. $$
+\end{defn}
 
-\definition{2.0.2}
+\begin{defn}
 Let $\x, \y \in \F_2^n$. Then their \textbf{Hamming distance} is
 $$ d(\x, \y) := |\set{ i : x_i \neq y_i }| $$
 
@@ -144,14 +150,16 @@ Finally, define
 \begin{align}
   P^*(M, n, p) := \min\set{ P_C : C \tt{is a code with $M$ words of length $n$} }
 \end{align}
+\end{defn}
 
-\theorem{2.0.3}
-(Shannon's theorem)
-$$
-0 < R < 1 + p \log p + q \log q
-\implies \lim_{n \ra \infty} P^*(M_n, n, p) = 0
-$$
-where $M_n := 2^{[Rn]}$ and all logarithms have base 2.
+\begin{thm}
+  (Shannon's theorem)
+  $$
+  0 < R < 1 + p \log p + q \log q
+  \implies \lim_{n \ra \infty} P^*(M_n, n, p) = 0
+  $$
+  where $M_n := 2^{[Rn]}$ and all logarithms have base 2.
+\end{thm}
 
 \begin{proof}
 Observe that the probability of an error pattern with $w$ errors is $p^w q^{-w}$, which depends only on $w$.
@@ -261,31 +269,35 @@ For this section, we will use the $\F_q$ as the group for our group code, where 
 Then $Q^n$ is is an $n$-dimensional vector space; denote $Q^n$ by $\calR^n$ or just $\calR$.
 From here on, a \textbf{code} shall be defined to be a proper subset of $\calR$.
 
-\definition{3.0.1}
+\begin{defn}
 The \textbf{minimum distance} of a nontrivial code $C$ is
 $$ \min\set{ d(\x, \y) : \x,\y \in C, \x \neq \y } $$
+\end{defn}
 
-\definition{3.0.2}
+\begin{defn}
 The \textbf{information rate} (or just \textbf{rate}) of a code $C$ is
 $$ R := n\i \log_q |C| $$
+\end{defn}
 
 % ----------------------------------------------------------------------------------------------------------------------------
 \subsection{Linear Codes}
 
-\definition{3.1.1}
+\begin{defn}
 A \textbf{linear code} $C$ is a linear subspace of $\calR$.
 Let $k$ be the dimension of $C$.
 Then $C$ is called an $[n,k]$ code.
 If $C$ has a minimum distance between codewords, call it $d$.
 Then $C$ is called an $[n,k,d]$ code.
+\end{defn}
 
-\definition{3.1.2}
+\begin{defn}
 A \textbf{generator matrix} $G$ for a linear $[n,k]$ code $C$ is a $k \times n$ matrix for which the rows are a basis of $C$.
 Observe that $C = \set{ \v a G : \v a \in \calR }$.
 $G$ is in \textbf{standard form} (row-echelon form) if $G = (I \; P)$ where $I$ is the $k \times k$ identity matrix.
 If $G$ is in standard form, then the first $k$ symbols of a codeword of $C$ are called the \textbf{information symbols}, and the remaining symbols of the codeword are called the \textbf{parity check symbols}.
+\end{defn}
 
-\definition{3.1.3}
+\begin{defn}
 Let $C$ be an $[n,k]$ code. Then $C$'s \textbf{dual code}, $\dual C$, is defined as
 $$ \dual C := \set{ \y \in \calR^n : \forall x \in C, \x \cdot \y = 0 }. $$
 Note that $\dual C$ is an $[n, n-k]$ code.
@@ -300,8 +312,9 @@ Since $G \trans H = 0$ \TODO{calculate this}, every codeword $\v a G$ has an inn
 which corresponds to a system of $n-k$ linear equations.
 In this way, $H$ is a generator matrix for $\dual C$.
 $H$ is called the \textbf{parity check matrix} for $C$.
+\end{defn}
 
-\definition{3.1.4}
+\begin{defn}
 Let $C$ be a linear code with parity check matrix $H$.
 Then for each $\v x \in \calR$, call $\x \trans H$ the \textbf{syndrome} of $\x$.
 Equation~\ref{eq:syndrome-0} demonstrated that $C$'s codewords are characterized by the syndrome of $\v 0$.
@@ -312,16 +325,17 @@ For $\x, \y \in \calR$ are in the same coset if and only if they have the same s
 $$ \x \trans H = \y \trans H \iff \x - \y \in C. $$
 Therefor, if $\v r = \x + \v e$ is recieved by the decoder, where $\x$ is the original signal that the decoder \textit{should} decode to and $\v e$ is the added noise, then $\v r$ and $\v e$ have the same syndrome.
 In the maximum-likelihood decoding of $\v r$, the decoder chooses an $\v e$ of minimal weight such that $\v e$ is in the same coset of $\x$, and then decodes $\v r$ as $\v r - e = \v x$.
+\end{defn}
 
-\definition{3.1.5}
+\begin{defn}
 Let $C$ be a code of length $n$ over the alphabet $\F_q$.
-Then the \textbf{extended code} $\extended{C}$ is defined as
-$$ \extended{C} := \set{ (c_1, \dots, c_n, c_{n+1}) : (c_1, \dots, c_n) \in C \land \sum_{i=1}^{n+1} c_i = 0 }. $$
+Then the \textbf{extended code} $\ext{C}$ is defined as
+$$ \ext{C} := \set{ (c_1, \dots, c_n, c_{n+1}) : (c_1, \dots, c_n) \in C \land \sum_{i=1}^{n+1} c_i = 0 }. $$
 Let $G$ be a generator and $H$ be a parity check matrix for $C$.
-Then construct $\extended{G}$ by appending a column to $G$ such that the sum of the columns of $\extended{G}$ is zero, making $\extended{G}$ indeed the parity check matrix for $\extended{C}$.
-Also construct $\extended{H}$ by
+Then construct $\ext{G}$ by appending a column to $G$ such that the sum of the columns of $\ext{G}$ is zero, making $\ext{G}$ indeed the parity check matrix for $\ext{C}$.
+Also construct $\ext{H}$ by
 \begin{equation}
-  \extended{H} := \begin{pmatrix}
+  \ext{H} := \begin{pmatrix}
     1 & 1 & 1 & \cdots & 1 \\
       &   &   &       & 0 \\
       &   & H &       & 0 \\
@@ -329,8 +343,9 @@ Also construct $\extended{H}$ by
       &   &   &       & 0 \\
   \end{pmatrix}
 \end{equation}
-Note that in the case that $C$ is a binary code with odd minimum distance $d$, then $\extended{C}$ has minimum distance $d + 1$ since the weights and distances for $\extended{C}$ must be even.
+Note that in the case that $C$ is a binary code with odd minimum distance $d$, then $\ext{C}$ has minimum distance $d + 1$ since the weights and distances for $\ext{C}$ must be even.
 \TODO{calcultate this}
+\end{defn}
 
 % ----------------------------------------------------------------------------------------------------------------------------
 \subsection{Hamming Codes}
@@ -341,12 +356,13 @@ $\dual C$ has $G$ as its parity matrix.
 For $\v c \in \dual C$, if $\v e$ is an error vector of weight 1, then the syndrome of $(\v c + \v e) \trans G$ is a multiple of a column of $G$.
 In this way, $\v c + \v e$ uniquely determines one column of $G$, and so $\dual C$ is a code that corrects at least one error.
 
-\definition{3.2.1}
+\begin{defn}
 Let $n := (q^k - 1)/(q - 1)$.
 The $[n, n-k]$ \textbf{Hamming code} over $\F_q$ is a code for which the parity chekc matrix has columns which are pairwise linearly independent over $\F_q$ (i.e the columns are a maximal set of pairwise linearly independent vectors).
 The minimum distance of a Hamming code is 3. \TODO{prove why}
+\end{defn}
 
-\example{3.2.2}
+\begin{exmp}
 The $[7,4]$ binary Hamming code $C$ has parity check matrix
 $$ H = \begin{pmatrix}
   0 & 0 & 0 & 1 & 1 & 1 & 1 \\
@@ -354,6 +370,7 @@ $$ H = \begin{pmatrix}
   1 & 0 & 1 & 0 & 1 & 0 & 1
 \end{pmatrix} $$
 \TODO{what to say about this, example 3.3.3}
+\end{exmp}
 
 
 % ----------------------------------------------------------------------------------------------------------------------------
@@ -376,24 +393,30 @@ $$ \begin{pmatrix}
   1 & 0 & 0 & 1 & 0 & 1 & 1
 \end{pmatrix} $$
 $H$ consists of $\v 0$, the seven cyclic shifts of $(1\;1\;0\;1\;0\;0\;0)$, which is just $PG(2,2)$ \TODO{define this or throw out}, and the complements of these 8 words (the complement of a word replaces 0s with 1s and visa versa).
-$\extended{H}$
+$\ext{H}$
 Define $H^*$ to be the code obtained by reversing the order of the symbols in the codewords of $H$.
-Consider the extended codes $\extended{H}, \extended{H^*}$, which are $[8,4]$ codes \TODO{calc this}.
-These codes are such that $\extended{H} \cap \extended{H^*} = \set{ \v 0, \v 1 }$, since only these two words are in both codes forwards and backwards. Additionally both codes are self-dual and have minimum distance 4.
+Consider the extended codes $\ext{H}, \ext{H^*}$, which are $[8,4]$ codes \TODO{calc this}.
+These codes are such that $\ext{H} \cap \ext{H^*} = \set{ \v 0, \v 1 }$, since only these two words are in both codes forwards and backwards. Additionally both codes are self-dual and have minimum distance 4.
 
-Next, define a code $\extended{C}$ with words of length 24 by
-$$ \extended{C} := \set{ (\v a + \x, \v b + \x, \v a + \v b + \x) : \v a,\v b \in \extended{H}, \x \in \extended{H^*} }. $$
-Observe that by letting $\v a, \v b$ range along a basis of $\extended H$ and $\x$ range along a basis of $\extended{H^*}$, $(\v a, 0, \v a), (0, \v b, \v b), (\x, \x, \x)$ form a basis for $\extended{C}$.
-So $\extended{C}$ is a $[24,12]$ code.
-Furthermore, any two basis vectors of $\extended{C}$ are orthogonal and therefor $\extended{C}$ is self-dual as well.
-Since all basis vectors have weight divisible by 4 (\TODO{referenec to hamming codes?}), every word in $\extended{C}$ has weight divisible by 4.
+Next, define a code $\ext{C}$ with words of length 24 by
+$$ \ext{C} := \set{ (\v a + \x, \v b + \x, \v a + \v b + \x) : \v a,\v b \in \ext{H}, \x \in \ext{H^*} }. $$
+Observe that by letting $\v a, \v b$ range along a basis of $\ext H$ and $\x$ range along a basis of $\ext{H^*}$, $(\v a, 0, \v a), (0, \v b, \v b), (\x, \x, \x)$ form a basis for $\ext{C}$.
+So $\ext{C}$ is a $[24,12]$ code.
+Furthermore, any two basis vectors of $\ext{C}$ are orthogonal and therefor $\ext{C}$ is self-dual as well.
+Since all basis vectors have weight divisible by 4 (\TODO{referenec to hamming codes?}), every word in $\ext{C}$ has weight divisible by 4.
 
+Suppose that some $\v b \in \ext{C}$ has $w(\v c) < 8$.
 Since each of $\x + \v a, \v b + \x, \v a + \v b + \x$ have even weight, one of them must be $\v 0$.
 So, either $\x = \v 0$ or $\x = \v 1$.
 Without loss of generality, suppose $x = 0$.
 Then the vectors become $\v a, \v b, \v a + \v b$, which have weights 0, 4, or 8.
 % TODO: where does \v c come from?????
+Therefor $\v c = \v 0$, and so $\ext{C}$ has minimum distance 8.
 
+Next, construct the code $C$ by removing the last coordinate of every word in $\ext{C}$.
+Then $C$ is a $[23,12]$ code with minimum distance 7, since the last coordinate of each row of the generator matrix for $H$ (which is also of the parity check matrix for $H$ as defined at the beginning of this section) was a $1$.
+The resulting code $C$ is called the \textbf{binary Golay code}.
+% TODO: there is a different construction of this at the end of the QR code section
 
 % ----------------------------------------------------------------------------------------------------------------------------
 % ----------------------------------------------------------------------------------------------------------------------------
@@ -401,6 +424,11 @@ Then the vectors become $\v a, \v b, \v a + \v b$, which have weights 0, 4, or 8
 
 % ----------------------------------------------------------------------------------------------------------------------------
 \subsection{Definitions}
+
+\begin{defn}
+  A linear code $C$ is called \textbf{cyclic} if
+  $$ (c_0, c_1, \dots, c_{n-1}) \in C \implies (c_{n-1}, c_0, \dots, c_{n-2}) \in C $$
+\end{defn}
 
 % ----------------------------------------------------------------------------------------------------------------------------
 \subsection{Generator Matrix and Check Polynomial}
