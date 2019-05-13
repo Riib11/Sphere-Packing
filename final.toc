@@ -1,17 +1,16 @@
 \contentsline {section}{\numberline {0}Preface}{3}% 
 \contentsline {section}{\numberline {1}Introduction}{3}% 
 \contentsline {subsection}{\numberline {1.1}The Coding Problem}{3}% 
-\contentsline {subsection}{\numberline {1.2}Transmission Specifications}{3}% 
-\contentsline {section}{\numberline {2}Shannon's Theorem}{4}% 
-\contentsline {section}{\numberline {3}Linear Codes}{6}% 
-\contentsline {subsection}{\numberline {3.1}Linear Codes}{6}% 
-\contentsline {subsection}{\numberline {3.2}Hamming Codes}{7}% 
-\contentsline {subsection}{\numberline {3.3}Weight Enumerators}{8}% 
-\contentsline {section}{\numberline {4}The Binary Golay Code}{8}% 
-\contentsline {subsection}{\numberline {4.1}The Binary Golay Code}{8}% 
-\contentsline {section}{\numberline {5}Cyclic Codes}{8}% 
-\contentsline {subsection}{\numberline {5.1}Definitions}{8}% 
-\contentsline {subsection}{\numberline {5.2}Generator Matrix and Check Polynomial}{9}% 
-\contentsline {subsection}{\numberline {5.3}Zeros of a Cyclic Code}{10}% 
-\contentsline {subsection}{\numberline {5.4}Idempotent of a Cyclic Code}{10}% 
-\contentsline {subsection}{\numberline {5.5}Quadratic Residue\IeC {\nobreakspace }(QR) Codes}{11}% 
+\contentsline {subsection}{\numberline {1.2}Transmission Specifications}{4}% 
+\contentsline {subsection}{\numberline {1.3}Shannon's Theorem}{4}% 
+\contentsline {section}{\numberline {2}Linear Codes}{7}% 
+\contentsline {subsection}{\numberline {2.1}Linear Codes}{7}% 
+\contentsline {subsection}{\numberline {2.2}Hamming Codes}{8}% 
+\contentsline {section}{\numberline {3}The Binary Golay Code}{9}% 
+\contentsline {subsection}{\numberline {3.1}The Binary Golay Code}{9}% 
+\contentsline {section}{\numberline {4}Cyclic Codes}{9}% 
+\contentsline {subsection}{\numberline {4.1}Definitions}{9}% 
+\contentsline {subsection}{\numberline {4.2}Generator Matrix and Check Polynomial}{10}% 
+\contentsline {subsection}{\numberline {4.3}Zeros of a Cyclic Code}{11}% 
+\contentsline {subsection}{\numberline {4.4}Idempotent of a Cyclic Code}{11}% 
+\contentsline {subsection}{\numberline {4.5}Quadratic Residue\IeC {\nobreakspace }(QR) Codes}{12}% 
